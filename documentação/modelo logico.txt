@@ -1,0 +1,7 @@
+Usuario:ID(num: auto incremnet), nome(string), senha,(string), email(string)
+ADM:ID(num: auto incremnet), nome(string), senha,(string), email(string)
+Imoveis:ID(num: auto incremnet), nome(string), preco(num), localidade(string), descricao (string), tipo(string), banheiro(num), quarto(num), area()num, status(string)
+Fotos:ID(num: autoencremnet), aqruivo-foto(srting), ID_imovel
+
+hitorioco: ID_usuario, ID_Imovel, data_visu, ID
+Favorito:ID_usuario, ID_imovel
