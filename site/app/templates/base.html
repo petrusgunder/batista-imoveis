@@ -1,1 +1,30 @@
-<h1>teste</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Site de Imóveis{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="{{ url_for('public.home') }}">Início</a>
+            <a href="#">Contato</a>
+            <a href="#">Sobre</a>
+        </div>
+        <div class="search">
+            <a href="#">buscar</a>
+        </div>
+    </header>
+
+    <main>
+        {% block conteudo %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Site de Imóveis</p>
+    </footer>
+
+</body>
+</html>
