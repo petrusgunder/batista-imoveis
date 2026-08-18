@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+    <section class="hero">
+        <h1>Encontre o imóvel certo, no seu bairro.</h1>
+
+        <form class="filtro" action="#">
+            <div class="campo">
+                <label for="busca">O que você procura</label>
+                <input type="text" id="busca" name="busca" placeholder="Bairro, rua ou cidade">
+            </div>
+
+            <div class="campo campo-curto">
+                <label for="negociacao">Negócio</label>
+                <select id="negociacao" name="negociacao">
+                    <option value="alugar">Alugar</option>
+                    <option value="comprar">Comprar</option>
+                </select>
+            </div>
+
+            <div class="campo campo-curto">
+                <label for="tipo">Tipo</label>
+                <select id="tipo" name="tipo">
+                    <option value="apartamento">Apartamento</option>
+                    <option value="casa">Casa</option>
+                    <option value="kitnet">Kitnet</option>
+                </select>
+            </div>
+
+            <div class="campo campo-curto">
+                <label for="preco-min">Preço min.</label>
+                <input type="number" id="preco-min" name="preco_min" min="0" placeholder="R$ 0">
+            </div>
+
+            <div class="campo campo-curto">
+                <label for="preco-max">Preço máx.</label>
+                <input type="number" id="preco-max" name="preco_max" min="0" placeholder="Sem limite">
+            </div>
+
+            <button type="submit">Buscar imóveis</button>
+        </form>
+    </section>
+
+    <section class="imoveis-em-destaque">
+        <h2>Imóveis em destaque</h2>
+
+        <div class="grid-imoveis">
+            <!-- Imóvel 1 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 2 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 3 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 4 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 5 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 6 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imóvel 7 -->
+            <article class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Ilustração de imóvel">
+                    <button type="button" class="btn-favorito" aria-label="Favoritar imóvel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="texto">
+                    <div class="valor">R$ 100.000</div>
+                    <div class="dados">
+                        <span>300 m²</span>
+                        <span>1 quarto</span>
+                        <span>1 banheiro</span>
+                    </div>
+
+                    <div class="localizacao">
+                        <p class="endereco">Rua Genérica, 123</p>
+                        <p class="cidade">Laguna, SC</p>
+                    </div>
+
+                    <p class="descricao">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+                    <div class="contatos">
+                        <a href="#" class="btn-whatsapp">WhatsApp</a>
+                        <a href="#" class="btn-email">E-mail</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+{% endblock %}
