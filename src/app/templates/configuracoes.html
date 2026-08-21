@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block titulo %}Configurações — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="config">
+    <aside class="config-menu">
+
+        <div class="config-grupo">
+            <p class="config-grupo-titulo">Minha conta</p>
+            <ul>
+                <li><a href="#conta" class="ativo">Geral</a></li>
+                <li><a href="#senha">Trocar senha</a></li>
+                <li><a href="#perigo" class="config-link-perigo">Deletar conta</a></li>
+            </ul>
+        </div>
+
+        <div class="config-grupo">
+            <p class="config-grupo-titulo">Atividade</p>
+            <ul>
+                <li><a href="{{ url_for('public.carrinho') }}">Meus favoritos</a></li>       {# rota sugerida: public.favoritos #}
+                <li><a href="{{ url_for('public.historico') }}">Ver histórico</a></li>        {# rota sugerida: public.historico #}
+            </ul>
+        </div>
+
+        <div class="config-grupo">
+            <p class="config-grupo-titulo">Comunidade</p>
+            <ul>
+                <li><a href="{{ url_for('public.colaborador') }}">Pedir para ser colaborador</a></li> {# rota sugerida: public.colaborador #}
+                <li><a href="{{ url_for('public.contato') }}">Contatos</a></li>                    {# rota sugerida: public.contato #}
+            </ul>
+        </div>
+
+        <div class="config-grupo">
+            <p class="config-grupo-titulo">Administração</p>
+            <ul>
+                <li><a href="{{ url_for('public.loguinadm') }}">Entrar como ADM</a></li>       {# rota sugerida: admin.login #}
+            </ul>
+        </div>
+
+    </aside>
+
+    <div class="config-conteudo">
+
+        <div id="conta" class="config-secao">
+            <h1>Geral</h1>
+            <p class="config-sub">Informações da sua conta.</p>
+
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" value="">
+            </div>
+
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="">
+            </div>
+
+            <button class="config-btn" type="button">Salvar alterações</button>
+        </div>
+
+        <div id="senha" class="config-secao">
+            <h2>Trocar senha</h2>
+
+            <div class="campo">
+                <label for="senha-atual">Senha atual</label>
+                <input type="password" id="senha-atual" name="senha_atual">
+            </div>
+
+            <div class="campo">
+                <label for="senha-nova">Nova senha</label>
+                <input type="password" id="senha-nova" name="senha_nova">
+            </div>
+
+            <button class="config-btn" type="button">Atualizar senha</button>
+        </div>
+
+        <div class="config-secao">
+            <h2>Sair</h2>
+            <p class="config-sub">Encerrar sua sessão neste dispositivo.</p>
+            <button class="config-btn config-btn-secundario" type="button">Sair da conta</button>
+        </div>
+
+        <div id="perigo" class="config-secao config-zona-perigo">
+            <h2>Zona de perigo</h2>
+            <p class="config-sub">Deletar sua conta é permanente e remove seus favoritos e histórico.</p>
+            <button class="config-btn config-btn-perigo" type="button">Deletar minha conta</button>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
