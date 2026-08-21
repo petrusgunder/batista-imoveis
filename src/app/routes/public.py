@@ -21,4 +21,20 @@ def carrinho():
 
 @public_bp.route('/menu_dos_menus')
 def menu_dos_menus():
-    return render_template('base_com_menu.html')
+    return render_template('configuracoes.html')
+
+@public_bp.route('/colaborador')
+def colaborador():
+    return render_template('colaborador.html')
+
+@public_bp.route('/historico')
+def historico():
+    return render_template('historico.html')
+
+@public_bp.route('/contato')
+def contato():
+    return render_template('contato.html')
+
+@public_bp.route('/loguinadm')
+def loguinadm():
+    return render_template('loguinadm.html')

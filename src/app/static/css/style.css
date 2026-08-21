@@ -597,3 +597,156 @@ nav.pesquisa a:hover {
     border-color: var(--terracotta);
     background: #fff;
 }
+
+/* ==========================================================================
+   Configurações (sidebar + conteúdo, no padrão da referência do GitHub)
+   ========================================================================== */
+ 
+.config {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+}
+ 
+.config-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+ 
+.config-grupo-titulo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+}
+ 
+.config-menu ul {
+    list-style: none;
+}
+ 
+.config-menu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    border-left: 2px solid transparent;
+}
+ 
+.config-menu a:hover {
+    background: var(--terracotta-soft);
+    color: var(--terracotta-deep);
+}
+ 
+.config-menu a.ativo {
+    color: var(--terracotta-deep);
+    border-left-color: var(--terracotta);
+    background: var(--terracotta-soft);
+    font-weight: 600;
+}
+ 
+.config-link-perigo {
+    color: #a3311b !important;
+}
+ 
+.config-link-perigo:hover {
+    background: #fbe4de !important;
+    color: #7c2413 !important;
+}
+ 
+.config-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+ 
+.config-secao {
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+ 
+.config-secao h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+ 
+.config-secao h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+ 
+.config-sub {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-top: -8px;
+}
+ 
+.config-secao .campo {
+    max-width: 360px;
+}
+ 
+.config-btn {
+    align-self: flex-start;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #fff;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+ 
+.config-btn:hover {
+    background: var(--terracotta-deep);
+}
+ 
+.config-btn-secundario {
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--sand);
+}
+ 
+.config-btn-secundario:hover {
+    background: var(--sand);
+}
+ 
+.config-zona-perigo {
+    border-color: #e3b3a4;
+    background: #fdf5f2;
+}
+ 
+.config-btn-perigo {
+    background: #a3311b;
+}
+ 
+.config-btn-perigo:hover {
+    background: #7c2413;
+}
+ 
+@media (max-width: 720px) {
+    .config {
+        grid-template-columns: 1fr;
+    }
+ 
+    .config-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+}
