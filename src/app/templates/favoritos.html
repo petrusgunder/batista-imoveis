@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block titulo %}Meus favoritos — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="pagina-lista">
+    <h1>Meus favoritos</h1>
+    <p class="pagina-sub">Os imóveis que você salvou aparecem aqui.</p>
+
+    <div class="imoveis-em-destaque">
+
+        {# Exemplo estático — depois isso vira um {% for imovel in favoritos %} #}
+        <div class="imovel">
+            <div class="imagem">
+                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Fachada do imóvel">
+            </div>
+            <div class="texto">
+                <div>
+                    <div class="valor"><p class="preco">R$ 245.000</p> <button class="favoritar" aria-label="Remover dos favoritos">♥</button></div>
+                    <div class="dados"><p>85 m²</p> <p>2 quartos</p> <p>1 banheiro</p></div>
+                    <div class="endereco">Rua das Palmeiras, 45</div>
+                    <div class="cidade">Itajaí, SC</div>
+                    <div class="descricao">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</div>
+                </div>
+                <div class="contatos">
+                    <button>WhatsApp</button>
+                    <button>E-mail</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

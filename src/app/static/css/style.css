@@ -138,7 +138,7 @@ nav.pesquisa a:hover {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    flex: 1 1 220px;
+    flex: 1 1 10px;
 }
 
 .campo-curto {
@@ -391,4 +391,209 @@ nav.pesquisa a:hover {
     .filtro button {
         width: 100%;
     }
+}
+
+ 
+
+ 
+/* ==========================================================================
+   Auth (cadastro / login)
+   ========================================================================== */
+ 
+   .auth {
+    min-height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+}
+ 
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    border: 1px solid var(--sand);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 40px -18px rgba(36, 26, 19, 0.25);
+    padding: 36px 32px 28px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+ 
+.auth-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 32px;
+    right: 32px;
+    height: 3px;
+    background: var(--terracotta);
+    border-radius: 0 0 3px 3px;
+}
+ 
+.auth-card h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: var(--ink);
+}
+ 
+.auth-sub {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin-top: -8px;
+}
+ 
+ 
+.auth-card button {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    margin-top: 8px;
+}
+ 
+.auth-card button:hover {
+    background: var(--terracotta-deep);
+}
+ 
+.auth-alt {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--ink-soft);
+}
+ 
+.auth-alt a {
+    color: var(--terracotta);
+    font-weight: 600;
+    text-decoration: none;
+}
+ 
+.auth-alt a:hover {
+    text-decoration: underline;
+}
+ 
+/* ==========================================================================
+   Menu da conta (dropdown dos três pontos)
+   ========================================================================== */
+ 
+   .pesquisa {
+    align-items: center;
+}
+ 
+.pesquisa svg {
+    display: block;
+}
+ 
+.menu-conta {
+    position: relative;
+}
+ 
+.menu-conta-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius);
+}
+ 
+.menu-conta-toggle:hover {
+    background: rgba(250, 246, 239, 0.1);
+}
+ 
+.menu-conta-lista {
+    list-style: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    background: #fff;
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    box-shadow: 0 18px 40px -14px rgba(36, 26, 19, 0.35);
+    padding: 8px;
+    display: none;
+    z-index: 20;
+}
+ 
+.menu-conta.aberto .menu-conta-lista {
+    display: block;
+}
+ 
+.menu-conta-lista li a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    color: var(--ink);
+}
+ 
+.menu-conta-lista li a:hover {
+    background: var(--terracotta-soft);
+    color: var(--terracotta-deep);
+}
+ 
+.menu-conta-lista .menu-divisor {
+    height: 1px;
+    background: var(--sand);
+    margin: 6px 4px;
+}
+ 
+.menu-conta-lista .menu-perigo {
+    color: #a3311b;
+}
+ 
+.menu-conta-lista .menu-perigo:hover {
+    background: #fbe4de;
+    color: #7c2413;
+} 
+/* ==========================================================================
+   Páginas de lista (favoritos / histórico)
+   ========================================================================== */
+ 
+.pagina-lista {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+ 
+.pagina-lista h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 2rem;
+    color: var(--ink);
+}
+ 
+.pagina-sub {
+    color: var(--ink-soft);
+    margin: 6px 0 32px;
+}
+ 
+.auth-card textarea {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    padding: 11px 12px;
+    resize: vertical;
+}
+ 
+.auth-card textarea:focus {
+    outline: none;
+    border-color: var(--terracotta);
+    background: #fff;
 }
