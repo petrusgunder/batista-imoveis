@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block titulo %}Histórico — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="pagina-lista">
+    <h1>Histórico</h1>
+    <p class="pagina-sub">Últimos imóveis que você visualizou.</p>
+
+    <div class="imoveis-em-destaque">
+        {# Exemplo estático — depois vira um {% for item in historico %}, ordenado por data_visu #}
+        <div class="imovel">
+            <div class="imagem">
+                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Fachada do imóvel">
+            </div>
+            <div class="texto">
+                <div>
+                    <div class="valor"><p class="preco">R$ 580.000</p></div>
+                    <div class="dados"><p>160 m²</p> <p>3 quartos</p> <p>2 banheiros</p></div>
+                    <div class="endereco">Av. Beira-Mar, 900</div>
+                    <div class="cidade">Florianópolis, SC</div>
+                    <div class="descricao">Visitado em 20/08/2026</div>
+                </div>
+                <div class="contatos">
+                    <button>WhatsApp</button>
+                    <button>E-mail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

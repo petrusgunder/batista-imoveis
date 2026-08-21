@@ -1,13 +1,36 @@
 {% extends "base.html" %}
 
+{% block titulo %}Criar conta — Batista Imóveis{% endblock %}
+
 {% block conteudo %}
-<section class="cadastro">
+<section class="auth">
+    <form class="auth-card" action="#" method="POST">
+        <h1>Criar conta</h1>
+        <p class="auth-sub">Salve seus imóveis favoritos e acompanhe seu histórico de buscas.</p>
 
-    <div class="cadastro">
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+        </div>
 
+        <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+        </div>
 
+        <div class="campo">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" required>
+        </div>
 
-    </div>
+        <div class="campo">
+            <label for="confirmar-senha">Confirmar senha</label>
+            <input type="password" id="confirmar-senha" name="confirmar_senha" placeholder="Repita a senha" required>
+        </div>
 
+        <button type="submit">Criar conta</button>
+
+        <p class="auth-alt">Já tem conta? <a href="{{ url_for('public.loguin') }}">loguin</a></p>
+    </form>
 </section>
 {% endblock %}

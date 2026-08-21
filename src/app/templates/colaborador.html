@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block titulo %}Virar colaborador — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="auth">
+    <form class="auth-card" action="#" method="POST">
+        <h1>Virar colaborador</h1>
+        <p class="auth-sub">Peça acesso para cadastrar e gerenciar imóveis no site. Sua solicitação passa por aprovação.</p>
+
+        <div class="campo">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+        </div>
+
+        <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+        </div>
+
+        <div class="campo">
+            <label for="motivo">Por que você quer colaborar?</label>
+            <textarea id="motivo" name="motivo" rows="4" placeholder="Conte um pouco sobre você" required></textarea>
+        </div>
+
+        <button type="submit">Enviar solicitação</button>
+    </form>
+</section>
+{% endblock %}
