@@ -4,7 +4,7 @@
 
 {% block conteudo %}
 <section class="auth">
-    <form class="auth-card" action="#" method="POST">
+    <form class="auth-card" action="{{ url_for('auth.cadastro') }}" method="POST">
         <h1>Criar conta</h1>
         <p class="auth-sub">Salve seus imóveis favoritos e acompanhe seu histórico de buscas.</p>
 
@@ -30,7 +30,7 @@
 
         <button type="submit">Criar conta</button>
 
-        <p class="auth-alt">Já tem conta? <a href="{{ url_for('public.loguin') }}">loguin</a></p>
+        <p class="auth-alt">Já tem conta? <a href="{{ url_for('auth.loguin') }}">Entrar</a></p>
     </form>
 </section>
 {% endblock %}

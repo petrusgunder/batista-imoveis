@@ -4,7 +4,7 @@
 
 {% block conteudo %}
 <section class="auth">
-    <form class="auth-card" action="#" method="POST">
+    <form class="auth-card" action="{{ url_for('auth.loguin') }}" method="POST">
         <h1>Entrar</h1>
         <p class="auth-sub">Acesse seus favoritos e seu histórico de buscas.</p>
 

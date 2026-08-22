@@ -35,5 +35,15 @@
         </div>
     </div>
 
+    <div class="favoritar">
+
+        <form method="POST" action="{{ url_for('public.favoritar', id=imovel.id) }}" style="display:inline">
+            <button type="submit" class="favoritar">
+                {% if ja_favoritado %}♥{% else %}♡{% endif %}
+            </button>
+        </form>
+
+    </div>
+
 </section>
 {% endblock %}
