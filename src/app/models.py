@@ -44,7 +44,6 @@ class ADM(db.Model, UserMixin):
     def get_id(self):
         return f"admin-{self.id}"
 
-
 class Imovel(db.Model):
     __tablename__ = 'imoveis'
     id = db.Column(db.Integer, primary_key=True)
@@ -53,10 +52,12 @@ class Imovel(db.Model):
     preco = db.Column(db.DECIMAL(10, 2), nullable=False)
     localizacao = db.Column(db.String(100), nullable=False)
     tipo = db.Column(db.String(50), nullable=False)
+    finalidade = db.Column(db.String(20), nullable=False, default='venda')  # nova coluna: 'venda' ou 'aluguel'
     quartos = db.Column(db.Integer, nullable=False)
     banheiros = db.Column(db.Integer, nullable=False)
     area = db.Column(db.DECIMAL(10, 2), nullable=False)
     status = db.Column(db.String(50), nullable=False)
+    
 
     fotos = db.relationship('Foto', backref='imovel', cascade='all, delete-orphan')
     favoritado_por = db.relationship('Favorito', backref='imovel', cascade='all, delete-orphan')
