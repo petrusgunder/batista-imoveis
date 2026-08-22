@@ -1,16 +1,27 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
-
-class Usuario(db.Model):
+class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    senha = db.Column(db.String(100), nullable=False)
+    senha = db.Column(db.String(200), nullable=False)  # 200, não 100 — hash é mais longo que 100 caracteres
+
+    def set_senha(self, senha_pura):
+        self.senha = generate_password_hash(senha_pura)
+
+    def check_senha(self, senha_pura):
+        return check_password_hash(self.senha, senha_pura)
+
+    def get_id(self):
+        return f"usuario-{self.id}"
+
+    
 
     favoritos = db.relationship('Favorito', backref='usuario', cascade='all, delete-orphan')
     historico = db.relationship('Historico', backref='usuario', cascade='all, delete-orphan')
@@ -29,6 +40,9 @@ class ADM(db.Model, UserMixin):
     def check_senha(self, senha_pura):
         from werkzeug.security import check_password_hash
         return check_password_hash(self.senha, senha_pura)
+
+    def get_id(self):
+        return f"admin-{self.id}"
 
 
 class Imovel(db.Model):

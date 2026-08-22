@@ -8,25 +8,25 @@
     <p class="pagina-sub">Últimos imóveis que você visualizou.</p>
 
     <div class="imoveis-em-destaque">
-        {# Exemplo estático — depois vira um {% for item in historico %}, ordenado por data_visu #}
-        <div class="imovel">
-            <div class="imagem">
-                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="Fachada do imóvel">
-            </div>
-            <div class="texto">
-                <div>
-                    <div class="valor"><p class="preco">R$ 580.000</p></div>
-                    <div class="dados"><p>160 m²</p> <p>3 quartos</p> <p>2 banheiros</p></div>
-                    <div class="endereco">Av. Beira-Mar, 900</div>
-                    <div class="cidade">Florianópolis, SC</div>
-                    <div class="descricao">Visitado em 20/08/2026</div>
+        {% for registro in registros %}
+            <div class="imovel">
+                <div class="imagem">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ registro.imovel.nome }}">
                 </div>
-                <div class="contatos">
-                    <button>WhatsApp</button>
-                    <button>E-mail</button>
+                <div class="texto">
+                    <div>
+                        <div class="valor"><p class="preco">R$ {{ "{:,.2f}".format(registro.imovel.preco) }}</p></div>
+                        <div class="endereco">{{ registro.imovel.localizacao }}</div>
+                        <div class="descricao">Visitado em {{ registro.data_acesso.strftime('%d/%m/%Y às %H:%M') }}</div>
+                    </div>
+                    <div class="contatos">
+                        <a href="{{ url_for('public.detalhe_imovel', id=registro.imovel.id) }}"><button>Ver novamente</button></a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% else %}
+            <p>Você ainda não visualizou nenhum imóvel.</p>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

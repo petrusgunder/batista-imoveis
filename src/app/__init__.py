@@ -8,10 +8,10 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
-    admin = ADM.query.get(int(user_id))
-    if admin:
-        return admin
-    return Usuario.query.get(int(user_id))
+    tipo, id_real = user_id.split('-')
+    if tipo == 'admin':
+        return ADM.query.get(int(id_real))
+    return Usuario.query.get(int(id_real))
 
 
 def create_app():
