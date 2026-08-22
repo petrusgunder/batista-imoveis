@@ -54,7 +54,7 @@ def home():
         .join(Historico, Historico.imovel_id == Imovel.id)
         .group_by(Imovel.id)
         .order_by(func.count(Historico.id).desc())
-        .limit(4)
+        .limit(8)
         .all()
     )
 
