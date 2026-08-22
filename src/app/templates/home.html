@@ -33,15 +33,17 @@
 
             <div class="campo campo-curto">
                 <label for="negociacao">Negócio</label>
-                <select id="negociacao" name="negociacao">
-                    <option value="alugar">Alugar</option>
-                    <option value="comprar">Comprar</option>
-                </select>
+                    <select id="negociacao" name="negociacao">
+                        <option value="">Qualquer</option>
+                        <option value="venda">Comprar</option>
+                        <option value="aluguel">Alugar</option>
+                    </select>
             </div>
 
             <div class="campo campo-curto">
                 <label for="tipo">Tipo</label>
                 <select id="tipo" name="tipo">
+                    <option value="">Qualquer</option>
                     <option value="apartamento">Apartamento</option>
                     <option value="casa">Casa</option>
                     <option value="kitnet">Kitnet</option>
@@ -88,5 +90,25 @@
         <p>Nenhum imóvel disponível no momento.</p>
     {% endfor %}
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('carrossel-track');
+    const seta = document.getElementById('carrossel-seta');
+    if (!track || !seta) return;
+
+    function proximo() {
+        const posicaoMaxima = track.scrollWidth - track.clientWidth;
+        if (track.scrollLeft >= posicaoMaxima - 10) {
+            track.scrollTo({ left: 0, behavior: 'smooth' }); // chegou no fim, volta pro começo
+        } else {
+            track.scrollBy({ left: 240, behavior: 'smooth' });
+        }
+    }
+
+    seta.addEventListener('click', proximo);
+    setInterval(proximo, 4000); // avança sozinho a cada 4 segundos, igual Steam
+});
+</script>
 
 {% endblock %}
