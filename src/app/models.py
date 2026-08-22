@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -14,13 +15,20 @@ class Usuario(db.Model):
     favoritos = db.relationship('Favorito', backref='usuario', cascade='all, delete-orphan')
     historico = db.relationship('Historico', backref='usuario', cascade='all, delete-orphan')
 
-
-class ADM(db.Model):
+class ADM(db.Model, UserMixin):
     __tablename__ = 'adm'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    senha = db.Column(db.String(100), nullable=False)
+    senha = db.Column(db.String(200), nullable=False)  # aumentei pra 200, hash é maior que 100 chars
+
+    def set_senha(self, senha_pura):
+        from werkzeug.security import generate_password_hash
+        self.senha = generate_password_hash(senha_pura)
+
+    def check_senha(self, senha_pura):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.senha, senha_pura)
 
 
 class Imovel(db.Model):

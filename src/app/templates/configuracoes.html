@@ -78,7 +78,9 @@
         <div class="config-secao">
             <h2>Sair</h2>
             <p class="config-sub">Encerrar sua sessão neste dispositivo.</p>
-            <button class="config-btn config-btn-secundario" type="button">Sair da conta</button>
+            <a href="{{ url_for('auth.logout') }}">
+                <button class="config-btn config-btn-secundario" type="button">Sair da conta</button>
+            </a>
         </div>
 
         <div id="perigo" class="config-secao config-zona-perigo">

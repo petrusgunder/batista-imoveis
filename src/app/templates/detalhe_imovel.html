@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ imovel.nome }} — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="detalhe-imovel">
+
+    <div class="detalhe-galeria">
+        {% if imovel.fotos %}
+            {% for foto in imovel.fotos %}
+                <img src="{{ url_for('static', filename='uploads/' + foto.url) }}" alt="{{ imovel.nome }}">
+            {% endfor %}
+        {% else %}
+            <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+        {% endif %}
+    </div>
+
+    <div class="detalhe-info">
+        <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
+        <h1>{{ imovel.nome }}</h1>
+        <p class="localizacao">{{ imovel.localizacao }}</p>
+
+        <div class="dados">
+            <p>{{ imovel.area }} m²</p>
+            <p>{{ imovel.quartos }} quartos</p>
+            <p>{{ imovel.banheiros }} banheiros</p>
+            <p>{{ imovel.tipo }}</p>
+        </div>
+
+        <p class="descricao">{{ imovel.descricao }}</p>
+
+        <div class="contatos">
+            <button>WhatsApp</button>
+            <button>E-mail</button>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
