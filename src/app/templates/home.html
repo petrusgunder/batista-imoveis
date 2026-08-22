@@ -1,10 +1,31 @@
 {% extends "base.html" %}
 
 {% block conteudo %}
+
+    {% if mais_visitados %}
+        <section class="carrossel-destaque">
+            <h2>Mais visitados</h2>
+            <div class="carrossel-wrapper">
+                <div class="carrossel-track" id="carrossel-track">
+                    {% for imovel, visitas in mais_visitados %}
+                        <a href="{{ url_for('public.detalhe_imovel', id=imovel.id) }}" class="carrossel-card">
+                            <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                            <div class="carrossel-card-info">
+                                <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
+                                <p class="localizacao">{{ imovel.localizacao }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                <button type="button" class="carrossel-seta" onclick="document.getElementById('carrossel-track').scrollBy({left: 240, behavior: 'smooth'})">›</button>
+            </div>
+        </section>
+    {% endif %}
+
     <section class="hero">
         <h1>Encontre o imóvel certo, no seu bairro.</h1>
 
-        <form class="filtro" action="#">
+        <form class="filtro" action="{{ url_for('public.home') }}" method="GET">
             <div class="campo">
                 <label for="busca">O que você procura</label>
                 <input type="text" id="busca" name="busca" placeholder="Bairro, rua ou cidade">

@@ -9,15 +9,10 @@ from app.models import ADM
 from flask_login import logout_user
 from flask import flash
 from app.models import db, Imovel, Favorito, Historico
+from sqlalchemy import func
+from app.models import Historico
 
 public_bp = Blueprint('public', __name__)
-
-@public_bp.route('/')
-
-@public_bp.route('/')
-def home():
-    imoveis = Imovel.query.filter_by(status='disponivel').all()
-    return render_template('home.html', imoveis=imoveis)
 
 def admin_required(f):
     @wraps(f)
@@ -27,6 +22,43 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@public_bp.route('/')
+
+@public_bp.route('/')
+def home():
+    query = Imovel.query.filter_by(status='disponivel')
+
+    busca = request.args.get('busca')
+    negociacao = request.args.get('negociacao')
+    tipo = request.args.get('tipo')
+    preco_min = request.args.get('preco_min')
+    preco_max = request.args.get('preco_max')
+
+    if busca:
+        query = query.filter(
+            Imovel.localizacao.ilike(f'%{busca}%') | Imovel.nome.ilike(f'%{busca}%')
+        )
+    if negociacao:
+        query = query.filter_by(finalidade=negociacao)
+    if tipo:
+        query = query.filter_by(tipo=tipo)
+    if preco_min:
+        query = query.filter(Imovel.preco >= preco_min)
+    if preco_max:
+        query = query.filter(Imovel.preco <= preco_max)
+
+    imoveis = query.limit(10).all()
+
+    mais_visitados = (
+        db.session.query(Imovel, func.count(Historico.id).label('visitas'))
+        .join(Historico, Historico.imovel_id == Imovel.id)
+        .group_by(Imovel.id)
+        .order_by(func.count(Historico.id).desc())
+        .limit(4)
+        .all()
+    )
+
+    return render_template('home.html', imoveis=imoveis, mais_visitados=mais_visitados)
 @public_bp.route('/cadastro')
 def cadastro():
     return render_template('cadastro.html')
