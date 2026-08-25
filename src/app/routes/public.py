@@ -11,6 +11,14 @@ from flask import flash
 from app.models import db, Imovel, Favorito, Historico
 from sqlalchemy import func
 from app.models import Historico
+import os
+from werkzeug.utils import secure_filename
+from app.models import Foto
+
+EXTENSOES_PERMITIDAS = {'png', 'jpg', 'jpeg', 'webp'}
+
+def extensao_permitida(nome_arquivo):
+    return '.' in nome_arquivo and nome_arquivo.rsplit('.', 1)[1].lower() in EXTENSOES_PERMITIDAS
 
 public_bp = Blueprint('public', __name__)
 
@@ -132,27 +140,6 @@ def favoritar(id):
     db.session.commit()
     return redirect(url_for('public.detalhe_imovel', id=id))
 
-@public_bp.route('/imovel/novo', methods=['GET', 'POST'])
-@admin_required
-def novo_imovel():
-    if request.method == 'POST':
-        imovel = Imovel(
-            nome=request.form.get('nome'),
-            descricao=request.form.get('descricao'),
-            preco=request.form.get('preco'),
-            localizacao=request.form.get('localizacao'),
-            tipo=request.form.get('tipo'),
-            quartos=request.form.get('quartos'),
-            banheiros=request.form.get('banheiros'),
-            area=request.form.get('area'),
-            status='disponivel'
-        )
-        db.session.add(imovel)
-        db.session.commit()
-        return redirect(url_for('public.detalhe_imovel', id=imovel.id))
-
-    return render_template('novo_imovel.html')
-
 @public_bp.route('/conta/editar', methods=['POST'])
 @login_required
 def editar_conta():
@@ -187,3 +174,38 @@ def deletar_conta():
     db.session.delete(usuario_a_apagar)
     db.session.commit()
     return redirect(url_for('public.home'))
+
+@public_bp.route('/imovel/novo', methods=['GET', 'POST'])
+@admin_required
+def novo_imovel():
+    if request.method == 'POST':
+        imovel = Imovel(
+            nome=request.form.get('nome'),
+            descricao=request.form.get('descricao'),
+            preco=request.form.get('preco'),
+            localizacao=request.form.get('localizacao'),
+            tipo=request.form.get('tipo'),
+            finalidade=request.form.get('finalidade'),
+            quartos=request.form.get('quartos'),
+            banheiros=request.form.get('banheiros'),
+            area=request.form.get('area'),
+            status='disponivel'
+        )
+        db.session.add(imovel)
+        db.session.commit()  # precisa salvar antes, pra existir um imovel.id pras fotos referenciarem
+
+        arquivos = request.files.getlist('fotos')
+        for arquivo in arquivos:
+            if arquivo and arquivo.filename and extensao_permitida(arquivo.filename):
+                nome_seguro = secure_filename(arquivo.filename)
+                nome_unico = f"{imovel.id}_{nome_seguro}"
+                caminho_completo = os.path.join('app', 'static', 'uploads', nome_unico)
+                arquivo.save(caminho_completo)
+
+                foto = Foto(imovel_id=imovel.id, url=nome_unico)
+                db.session.add(foto)
+
+        db.session.commit()
+        return redirect(url_for('public.detalhe_imovel', id=imovel.id))
+
+    return render_template('novo_imovel.html')

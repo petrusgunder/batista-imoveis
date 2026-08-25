@@ -6,10 +6,30 @@
         <section class="carrossel-destaque">
             <h2>Mais visitados</h2>
             <div class="carrossel-wrapper">
+                <button type="button" class="carrossel-seta carrossel-seta-esquerda" id="seta-esquerda" aria-label="Anterior">‹</button>
+
                 <div class="carrossel-track" id="carrossel-track">
                     {% for imovel, visitas in mais_visitados %}
                         <a href="{{ url_for('public.detalhe_imovel', id=imovel.id) }}" class="carrossel-card">
-                            <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                            {% if imovel.fotos %}
+                                <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
+                            {% else %}
+                                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                            {% endif %}
+                            <div class="carrossel-card-info">
+                                <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
+                                <p class="localizacao">{{ imovel.localizacao }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    {# Segundo conjunto, IDÊNTICO ao de cima — é o que permite o loop parecer infinito #}
+                    {% for imovel, visitas in mais_visitados %}
+                        <a href="{{ url_for('public.detalhe_imovel', id=imovel.id) }}" class="carrossel-card">
+                            {% if imovel.fotos %}
+                                <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
+                            {% else %}
+                                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                            {% endif %}
                             <div class="carrossel-card-info">
                                 <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
                                 <p class="localizacao">{{ imovel.localizacao }}</p>
@@ -17,7 +37,8 @@
                         </a>
                     {% endfor %}
                 </div>
-                <button type="button" class="carrossel-seta" onclick="document.getElementById('carrossel-track').scrollBy({left: 240, behavior: 'smooth'})">›</button>
+
+                <button type="button" class="carrossel-seta carrossel-seta-direita" id="seta-direita" aria-label="Próximo">›</button>
             </div>
         </section>
     {% endif %}
@@ -71,7 +92,7 @@
                 {% if imovel.fotos %}
                     <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
                 {% else %}
-                    <img src="{{ url_for('static', filename='img/sem-foto.jpg') }}" alt="Sem foto disponível">
+                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
                 {% endif %}
             </div>
             <div class="texto">
@@ -94,20 +115,55 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const track = document.getElementById('carrossel-track');
-    const seta = document.getElementById('carrossel-seta');
-    if (!track || !seta) return;
+    const setaEsquerda = document.getElementById('seta-esquerda');
+    const setaDireita = document.getElementById('seta-direita');
+    if (!track) return;
 
-    function proximo() {
-        const posicaoMaxima = track.scrollWidth - track.clientWidth;
-        if (track.scrollLeft >= posicaoMaxima - 10) {
-            track.scrollTo({ left: 0, behavior: 'smooth' }); // chegou no fim, volta pro começo
-        } else {
-            track.scrollBy({ left: 240, behavior: 'smooth' });
+    const cards = Array.from(track.querySelectorAll('.carrossel-card'));
+    const metade = cards.length / 2;
+    const larguraConjunto = cards[0].offsetWidth * metade + 16 * metade;
+
+    function destacarCardCentral() {
+        const centroTrack = track.scrollLeft + track.clientWidth / 2;
+        let maisProximo = null;
+        let menorDistancia = Infinity;
+
+        cards.forEach(card => {
+            const centroCard = card.offsetLeft + card.offsetWidth / 2;
+            const distancia = Math.abs(centroCard - centroTrack);
+            if (distancia < menorDistancia) {
+                menorDistancia = distancia;
+                maisProximo = card;
+            }
+            card.classList.remove('ativo');
+        });
+
+        if (maisProximo) maisProximo.classList.add('ativo');
+    }
+
+    function normalizarLoop() {
+        if (track.scrollLeft >= larguraConjunto) {
+            track.scrollLeft -= larguraConjunto;
+        } else if (track.scrollLeft < 0) {
+            track.scrollLeft += larguraConjunto;
         }
     }
 
-    seta.addEventListener('click', proximo);
-    setInterval(proximo, 4000); // avança sozinho a cada 4 segundos, igual Steam
+    function avancar() {
+        track.scrollBy({ left: 240, behavior: 'smooth' });
+        setTimeout(() => { normalizarLoop(); destacarCardCentral(); }, 350);
+    }
+
+    function voltar() {
+        track.scrollBy({ left: -240, behavior: 'smooth' });
+        setTimeout(() => { normalizarLoop(); destacarCardCentral(); }, 350);
+    }
+
+    if (setaDireita) setaDireita.addEventListener('click', avancar);
+    if (setaEsquerda) setaEsquerda.addEventListener('click', voltar);
+
+    destacarCardCentral();
+    setInterval(avancar, 3000);
 });
 </script>
 

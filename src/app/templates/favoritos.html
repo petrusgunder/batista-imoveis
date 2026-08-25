@@ -11,7 +11,11 @@
         {% for imovel in imoveis %}
             <div class="imovel">
                 <div class="imagem">
-                    <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                    {% if imovel.fotos %}
+                        <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
+                    {% else %}
+                        <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                    {% endif %}
                 </div>
                 <div class="texto">
                     <div>

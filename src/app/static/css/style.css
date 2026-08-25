@@ -766,6 +766,7 @@ nav.pesquisa a:hover {
 
 .carrossel-wrapper {
     position: relative;
+    padding: 20px 44px; /* espaço nas laterais para as setas não ficarem sobre os cards */
 }
 
 .carrossel-track {
@@ -773,11 +774,14 @@ nav.pesquisa a:hover {
     gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* esconde a barra de rolagem no Firefox */
+    scrollbar-width: none;
 }
 
+.carrossel-track {
+    padding: 0 20px; 
+}
 .carrossel-track::-webkit-scrollbar {
-    display: none; /* esconde a barra de rolagem no Chrome/Safari */
+    display: none;
 }
 
 .carrossel-card {
@@ -815,7 +819,6 @@ nav.pesquisa a:hover {
 .carrossel-seta {
     position: absolute;
     top: 50%;
-    right: -14px;
     transform: translateY(-50%);
     width: 36px;
     height: 36px;
@@ -826,8 +829,109 @@ nav.pesquisa a:hover {
     font-size: 1.3rem;
     cursor: pointer;
     box-shadow: 0 6px 16px -6px rgba(36, 26, 19, 0.4);
+    z-index: 3;
 }
 
 .carrossel-seta:hover {
     background: var(--terracotta-deep);
+}
+
+.carrossel-seta-esquerda {
+    left: 4px;
+}
+
+.carrossel-seta-direita {
+    right: 4px;
+}
+
+.carrossel-card {
+    transform: scale(0.85);
+    opacity: 0.55;
+    transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+}
+
+.carrossel-card.ativo {
+    transform: scale(1.08);
+    opacity: 1;
+    box-shadow: 0 20px 40px -16px rgba(36, 26, 19, 0.35);
+    z-index: 2;
+}
+
+.contatos {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.contatos button,
+.contatos a button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contatos button:hover,
+.contatos a button:hover {
+    transform: translateY(-2px);
+}
+
+/* WhatsApp — verde característico, mas dentro da paleta (não o verde puro do WhatsApp) */
+.contatos button:first-child {
+    background: #4a7c59;
+    color: #fff;
+}
+
+.contatos button:first-child:hover {
+    background: #3d6549;
+    box-shadow: 0 8px 20px -8px rgba(74, 124, 89, 0.5);
+}
+
+/* E-mail — usa a cor de marca do site */
+.contatos button:last-child {
+    background: var(--terracotta);
+    color: #fff;
+}
+
+.contatos button:last-child:hover {
+    background: var(--terracotta-deep);
+    box-shadow: 0 8px 20px -8px rgba(184, 72, 31, 0.5);
+}
+
+.favoritar {
+    background: #fff;
+    border: 1px solid var(--sand);
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: var(--terracotta);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.favoritar:hover {
+    background: var(--terracotta-soft);
+    transform: scale(1.1);
+}
+
+.imovel .imagem img,
+.detalhe-galeria img,
+.carrossel-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
 }
