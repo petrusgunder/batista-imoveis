@@ -209,3 +209,40 @@ def novo_imovel():
         return redirect(url_for('public.detalhe_imovel', id=imovel.id))
 
     return render_template('novo_imovel.html')
+
+@public_bp.route('/admin/imoveis')
+@admin_required
+def gerenciar_imoveis():
+    imoveis = Imovel.query.all()
+    return render_template('gerenciar_imoveis.html', imoveis=imoveis)
+
+
+@public_bp.route('/imovel/<int:id>/editar', methods=['GET', 'POST'])
+@admin_required
+def editar_imovel(id):
+    imovel = Imovel.query.get_or_404(id)
+
+    if request.method == 'POST':
+        imovel.nome = request.form.get('nome')
+        imovel.descricao = request.form.get('descricao')
+        imovel.preco = request.form.get('preco')
+        imovel.localizacao = request.form.get('localizacao')
+        imovel.tipo = request.form.get('tipo')
+        imovel.finalidade = request.form.get('finalidade')
+        imovel.quartos = request.form.get('quartos')
+        imovel.banheiros = request.form.get('banheiros')
+        imovel.area = request.form.get('area')
+        imovel.status = request.form.get('status')
+        db.session.commit()
+        return redirect(url_for('public.detalhe_imovel', id=imovel.id))
+
+    return render_template('editar_imovel.html', imovel=imovel)
+
+
+@public_bp.route('/imovel/<int:id>/excluir', methods=['POST'])
+@admin_required
+def excluir_imovel(id):
+    imovel = Imovel.query.get_or_404(id)
+    db.session.delete(imovel)
+    db.session.commit()
+    return redirect(url_for('public.gerenciar_imoveis'))
