@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gerenciar imóveis — Batista Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="pagina-lista">
+    <h1>Gerenciar imóveis</h1>
+    <p class="pagina-sub">Editar ou excluir imóveis cadastrados.</p>
+
+    <div class="imoveis-em-destaque">
+        {% for imovel in imoveis %}
+            <div class="imovel">
+                <div class="imagem">
+                    {% if imovel.fotos %}
+                        <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
+                    {% else %}
+                        <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+                    {% endif %}
+                </div>
+                <div class="texto">
+                    <div>
+                        <div class="valor"><p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p></div>
+                        <div class="endereco">{{ imovel.nome }} — {{ imovel.localizacao }}</div>
+                        <div class="descricao">Status: {{ imovel.status }}</div>
+                    </div>
+                    <div class="contatos">
+                        <a href="{{ url_for('public.editar_imovel', id=imovel.id) }}"><button>Editar</button></a>
+                        <form method="POST" action="{{ url_for('public.excluir_imovel', id=imovel.id) }}" onsubmit="return confirm('Excluir este imóvel? Essa ação não pode ser desfeita.')">
+                            <button type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Nenhum imóvel cadastrado ainda.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

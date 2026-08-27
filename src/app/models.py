@@ -28,6 +28,7 @@ class Usuario(db.Model, UserMixin):
 
 class ADM(db.Model, UserMixin):
     __tablename__ = 'adm'
+    is_admin = True
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
