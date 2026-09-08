@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block titulo %}Configurações — Batista Imóveis{% endblock %}
+{% block titulo %}Configurações — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="config">
@@ -56,6 +56,7 @@
             <p class="config-sub">Informações da sua conta.</p>
 
             <form method="POST" action="{{ url_for('public.editar_conta') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="campo">
                     <label for="nome">Nome</label>
                     <input type="text" id="nome" name="nome" value="{{ current_user.nome }}">
@@ -71,6 +72,7 @@
         <div id="senha" class="config-secao">
             <h2>Trocar senha</h2>
             <form method="POST" action="{{ url_for('public.trocar_senha') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="campo">
                     <label for="senha-atual">Senha atual</label>
                     <input type="password" id="senha-atual" name="senha_atual">
@@ -95,6 +97,7 @@
             <h2>Zona de perigo</h2>
             <p class="config-sub">Deletar sua conta é permanente e remove seus favoritos e histórico.</p>
             <form method="POST" action="{{ url_for('public.deletar_conta') }}" onsubmit="return confirm('Tem certeza? Essa ação não pode ser desfeita.')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button class="config-btn config-btn-perigo" type="submit">Deletar minha conta</button>
             </form>
         </div>

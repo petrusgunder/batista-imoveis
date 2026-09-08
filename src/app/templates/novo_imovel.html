@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{% block titulo %}Novo imóvel — Batista Imóveis{% endblock %}
+{% block titulo %}Novo imóvel — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="auth">
     <form class="auth-card" action="{{ url_for('public.novo_imovel') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1>Novo imóvel</h1>
 
         <div class="campo">
@@ -61,10 +62,14 @@
 
         <div class="campo">
             <label for="fotos">Fotos do imóvel</label>
-            <input type="file" id="fotos" name="fotos" accept="image/png, image/jpeg, image/webp" multiple>
+            <div id="linhas-fotos"></div>
+            <button type="button" id="btn-adicionar-foto" class="btn-adicionar-foto">＋ Adicionar foto</button>
+            <p class="campo-ajuda">Clique em "Adicionar foto" para cada foto extra. Em cada campo você também pode selecionar várias de uma vez segurando Ctrl (ou Cmd no Mac).</p>
         </div>
 
         <button type="submit">Cadastrar imóvel</button>
     </form>
 </section>
+
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 {% endblock %}

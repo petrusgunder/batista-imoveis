@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %}Batista Imóveis{% endblock %}</title>
+    <title>{% block titulo %}JB Imóveis{% endblock %}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
 
     <header class="site-header">
         <div class="logo">
-            <a href="{{ url_for('public.home') }}">Batista <span>Imóveis</span></a>
+            <a href="{{ url_for('public.home') }}">JB <span>Imóveis</span></a>
         </div>
         <nav class="pesquisa">
             <a href="{{ url_for('public.home') }}">Início</a>
@@ -50,16 +50,8 @@
     {% endif %}
     {% endwith %}
 
-    {% with mensagens = get_flashed_messages() %}
-    {% if mensagens %}
-        <div class="flash">
-            {% for m in mensagens %}<p>{{ m }}</p>{% endfor %}
-        </div>
-    {% endif %}
-    {% endwith %}
-
     <footer class="site-footer">
-        <p>&copy; 2026 Batista- Imóveis</p>
+        <p>&copy; 2026 JB Imóveis</p>
     </footer>
 
 </body>

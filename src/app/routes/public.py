@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, current_app
 from app.models import db, Imovel
 from flask import request, redirect, url_for
 from flask_login import login_required, current_user
@@ -19,6 +19,63 @@ EXTENSOES_PERMITIDAS = {'png', 'jpg', 'jpeg', 'webp'}
 
 def extensao_permitida(nome_arquivo):
     return '.' in nome_arquivo and nome_arquivo.rsplit('.', 1)[1].lower() in EXTENSOES_PERMITIDAS
+
+
+def eh_imagem_valida(arquivo):
+    """Valida o conteúdo real do arquivo (magic bytes), não só a extensão.
+    Impede enviar um .exe ou script renomeado para .jpg/.png/.webp."""
+    arquivo.stream.seek(0)
+    cabecalho = arquivo.read(16)
+    arquivo.stream.seek(0)
+
+    if cabecalho[:3] == b'\xff\xd8\xff':                      # JPEG
+        return True
+    if cabecalho[:8] == b'\x89PNG\r\n\x1a\n':                  # PNG
+        return True
+    if cabecalho[:4] == b'RIFF' and cabecalho[8:12] == b'WEBP':  # WEBP
+        return True
+    return False
+
+
+def salvar_fotos(imovel, arquivos):
+    """Salva os arquivos de imagem de um imóvel no disco e cria os registros Foto.
+
+    Rejeita arquivos que não sejam imagem válida (magic bytes), que passem do
+    limite de tamanho ou que estoure o limite de fotos por imóvel.
+    """
+    limite_fotos = current_app.config['MAX_FOTOS_POR_IMOVEL']
+    limite_tamanho = current_app.config['MAX_TAMANHO_ARQUIVO']
+    qtd_atual = len(imovel.fotos)
+    descartadas = 0
+
+    for arquivo in arquivos:
+        if qtd_atual >= limite_fotos:
+            descartadas += 1
+            continue
+        if not (arquivo and arquivo.filename):
+            continue
+        if not extensao_permitida(arquivo.filename):
+            descartadas += 1
+            continue
+        if arquivo.content_length and arquivo.content_length > limite_tamanho:
+            descartadas += 1
+            continue
+        if not eh_imagem_valida(arquivo):
+            descartadas += 1
+            continue
+
+        nome_seguro = secure_filename(arquivo.filename)
+        nome_unico = f"{imovel.id}_{qtd_atual}_{nome_seguro}"
+        caminho_completo = os.path.join('app', 'static', 'uploads', nome_unico)
+        arquivo.save(caminho_completo)
+
+        foto = Foto(imovel_id=imovel.id, url=nome_unico)
+        db.session.add(foto)
+        qtd_atual += 1
+
+    if descartadas > 0:
+        flash(f'{descartadas} foto(s) não foram salvas (limite de {limite_fotos} fotos, '
+              'tamanho máximo 5 MB ou arquivo não é uma imagem válida).')
 
 public_bp = Blueprint('public', __name__)
 
@@ -194,16 +251,7 @@ def novo_imovel():
         db.session.add(imovel)
         db.session.commit()  # precisa salvar antes, pra existir um imovel.id pras fotos referenciarem
 
-        arquivos = request.files.getlist('fotos')
-        for arquivo in arquivos:
-            if arquivo and arquivo.filename and extensao_permitida(arquivo.filename):
-                nome_seguro = secure_filename(arquivo.filename)
-                nome_unico = f"{imovel.id}_{nome_seguro}"
-                caminho_completo = os.path.join('app', 'static', 'uploads', nome_unico)
-                arquivo.save(caminho_completo)
-
-                foto = Foto(imovel_id=imovel.id, url=nome_unico)
-                db.session.add(foto)
+        salvar_fotos(imovel, request.files.getlist('fotos'))
 
         db.session.commit()
         return redirect(url_for('public.detalhe_imovel', id=imovel.id))
@@ -233,10 +281,31 @@ def editar_imovel(id):
         imovel.banheiros = request.form.get('banheiros')
         imovel.area = request.form.get('area')
         imovel.status = request.form.get('status')
+
+        salvar_fotos(imovel, request.files.getlist('fotos'))
+
         db.session.commit()
         return redirect(url_for('public.detalhe_imovel', id=imovel.id))
 
     return render_template('editar_imovel.html', imovel=imovel)
+
+
+@public_bp.route('/imovel/<int:id>/foto/<int:foto_id>/remover', methods=['POST'])
+@admin_required
+def remover_foto(id, foto_id):
+    foto = Foto.query.get_or_404(foto_id)
+    if foto.imovel_id != id:
+        abort(400)
+
+    caminho = os.path.join('app', 'static', 'uploads', foto.url)
+    try:
+        os.remove(caminho)
+    except OSError:
+        pass
+
+    db.session.delete(foto)
+    db.session.commit()
+    return redirect(url_for('public.editar_imovel', id=id))
 
 
 @public_bp.route('/imovel/<int:id>/excluir', methods=['POST'])

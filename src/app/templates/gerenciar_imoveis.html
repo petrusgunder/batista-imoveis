@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block titulo %}Gerenciar imóveis — Batista Imóveis{% endblock %}
+{% block titulo %}Gerenciar imóveis — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="pagina-lista">
@@ -16,6 +16,8 @@
                     {% else %}
                         <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
                     {% endif %}
+                    <span class="badge-finalidade">{{ imovel.finalidade }}</span>
+                    {% if imovel.fotos %}<span class="contador-fotos">📷 {{ imovel.fotos|length }}</span>{% endif %}
                 </div>
                 <div class="texto">
                     <div>
@@ -26,6 +28,7 @@
                     <div class="contatos">
                         <a href="{{ url_for('public.editar_imovel', id=imovel.id) }}"><button>Editar</button></a>
                         <form method="POST" action="{{ url_for('public.excluir_imovel', id=imovel.id) }}" onsubmit="return confirm('Excluir este imóvel? Essa ação não pode ser desfeita.')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit">Excluir</button>
                         </form>
                     </div>

@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{% block titulo %}Entrar como ADM — Batista Imóveis{% endblock %}
+{% block titulo %}Entrar como ADM — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="auth">
     <form class="auth-card" action="#" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1>Entrar como ADM</h1>
 
         <div class="campo">

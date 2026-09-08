@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{% block titulo %}Editar imóvel — Batista Imóveis{% endblock %}
+{% block titulo %}Editar imóvel — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="auth">
-    <form class="auth-card" action="{{ url_for('public.editar_imovel', id=imovel.id) }}" method="POST">
+    <form id="form-editar-imovel" class="auth-card" action="{{ url_for('public.editar_imovel', id=imovel.id) }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1>Editar imóvel</h1>
 
         <div class="campo">
@@ -68,7 +69,43 @@
             <input type="number" id="area" name="area" min="0" step="0.01" value="{{ imovel.area }}" required>
         </div>
 
+        <div class="campo">
+            <label>Fotos atuais</label>
+            {% if imovel.fotos %}
+                <div class="fotos-atuais">
+                    {% for foto in imovel.fotos %}
+                        <div class="foto-atual">
+                            <img src="{{ url_for('static', filename='uploads/' + foto.url) }}" alt="">
+                            {# Botão fora do form de edição, mas ligado ao form de remoção abaixo (sem form aninhado) #}
+                            <button type="submit" class="btn-remover-foto" form="form-remover-foto-{{ foto.id }}"
+                                    onclick="return confirm('Remover esta foto?')">Remover</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="campo-ajuda">Este imóvel ainda não tem fotos.</p>
+            {% endif %}
+        </div>
+
+        <div class="campo">
+            <label for="fotos">Adicionar fotos</label>
+            <div id="linhas-fotos"></div>
+            <button type="button" id="btn-adicionar-foto" class="btn-adicionar-foto">＋ Adicionar foto</button>
+            <p class="campo-ajuda">Clique em "Adicionar foto" para cada foto extra. Em cada campo você também pode selecionar várias de uma vez segurando Ctrl (ou Cmd no Mac).</p>
+        </div>
+
         <button type="submit">Salvar alterações</button>
     </form>
+
+    {# Forms de remoção fora do form de edição (evita form aninhado) #}
+    {% if imovel.fotos %}
+        {% for foto in imovel.fotos %}
+            <form id="form-remover-foto-{{ foto.id }}" method="POST" action="{{ url_for('public.remover_foto', id=imovel.id, foto_id=foto.id) }}" class="form-remover-foto">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </form>
+        {% endfor %}
+    {% endif %}
 </section>
+
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 {% endblock %}

@@ -1,16 +1,29 @@
 {% extends "base.html" %}
 
-{% block titulo %}{{ imovel.nome }} — Batista Imóveis{% endblock %}
+{% block titulo %}{{ imovel.nome }} — JB Imóveis{% endblock %}
 
 {% block conteudo %}
 <section class="detalhe-imovel">
 
-    <div class="detalhe-galeria">
-        {% for foto in imovel.fotos %}
-            <img src="{{ url_for('static', filename='uploads/' + foto.url) }}" alt="{{ imovel.nome }}">
-        {% else %}
-            <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
-        {% endfor %}
+    <div class="galeria">
+        <div class="galeria-principal">
+            {% if imovel.fotos %}
+                <img id="foto-principal" src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
+            {% else %}
+                <img id="foto-principal" src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
+            {% endif %}
+        </div>
+
+        {% if imovel.fotos|length > 1 %}
+        <div class="galeria-miniaturas">
+            {% for foto in imovel.fotos %}
+                <button type="button" class="miniatura{% if loop.first %} ativa{% endif %}"
+                        data-src="{{ url_for('static', filename='uploads/' + foto.url) }}" aria-label="Ver foto {{ loop.index }}">
+                    <img src="{{ url_for('static', filename='uploads/' + foto.url) }}" alt="">
+                </button>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <div class="detalhe-info">
@@ -36,6 +49,7 @@
     <div class="favoritar">
 
         <form method="POST" action="{{ url_for('public.favoritar', id=imovel.id) }}" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="favoritar">
                 {% if ja_favoritado %}♥{% else %}♡{% endif %}
             </button>
@@ -44,4 +58,20 @@
     </div>
 
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const principal = document.getElementById('foto-principal');
+    const miniaturas = document.querySelectorAll('.miniatura');
+    if (!principal || miniaturas.length === 0) return;
+
+    miniaturas.forEach(min => {
+        min.addEventListener('click', () => {
+            principal.src = min.dataset.src;
+            miniaturas.forEach(m => m.classList.remove('ativa'));
+            min.classList.add('ativa');
+        });
+    });
+});
+</script>
 {% endblock %}

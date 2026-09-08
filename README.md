@@ -1,6 +1,6 @@
-# 🏠 [Nome do Site] — Site de Imóveis
+# 🏠 JB Imóveis — Site de Imóveis
 
-> Site desenvolvido para [nome do cliente/vizinho], com o objetivo de divulgar imóveis disponíveis de forma simples e acessível.
+> Site de divulgação de imóveis para venda e aluguel, com área administrativa para cadastro, edição e exclusão de imóveis, galeria de fotos, favoritos e histórico de visitas.
 
 ![status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 ![python](https://img.shields.io/badge/python-3.x-blue)
@@ -8,134 +8,127 @@
 
 ## 📋 Sobre o projeto
 
-Descreva aqui em 2-3 parágrafos:
-- Qual problema o site resolve (ex: cliente não tinha presença online, divulgava imóveis só por WhatsApp/boca a boca)
-- Para quem é (público-alvo)
-- O que o site permite fazer (visitantes buscam imóveis, cliente cadastra/gerencia)
+O **JB Imóveis** é uma aplicação web (Flask) que permite a visitantes **buscar e ver imóveis disponíveis** (venda ou aluguel) com filtros de busca, negociação, tipo e preço. Cada anúncio tem uma **página de detalhe com galeria de fotos** (foto principal em destaque + miniaturas).
 
-**Contexto**: este foi meu primeiro projeto profissional, desenvolvido logo após concluir o curso técnico em [nome do curso]. Documentei aqui todo o processo de decisão técnica, não só o resultado final.
+Visitantes podem **criar conta**, salvar **imóveis favoritos** e consultar o **histórico** dos imóveis que visualizaram. A área administrativa (login protegido) permite gerenciar o catálogo: **cadastrar, editar e excluir imóveis**, além de **adicionar e remover fotos** individualmente.
 
 ## ✨ Funcionalidades
 
-- [ ] Listagem de imóveis com filtros (preço, bairro, quartos, tipo)
-- [ ] Página de detalhes com galeria de fotos
-- [ ] Formulário de contato / interesse no imóvel
-- [ ] Área administrativa para cadastro e edição de imóveis (login protegido)
-- [ ] Layout responsivo (mobile-first)
-- [ ] Busca por localização / mapa
-
-*(marque com `[x]` conforme for implementando)*
+- [x] Listagem de imóveis com filtros (busca por local, negociação venda/aluguel, tipo e faixa de preço)
+- [x] Carrossel de "Mais visitados" na página inicial
+- [x] Página de detalhe com galeria de fotos (foto principal + miniaturas clicáveis)
+- [x] Cadastro e login de usuários (Flask-Login)
+- [x] Favoritos e histórico de visitas
+- [x] Área administrativa (login próprio) para cadastro, edição e exclusão de imóveis
+- [x] Upload múltiplo de fotos (com pré-visualização e botão para adicionar uma a uma)
+- [x] Remoção individual de fotos na edição
+- [x] Página de configurações de conta (editar dados, trocar senha, excluir conta)
+- [x] Layout responsivo
 
 ## 🛠️ Tecnologias
 
 | Camada | Tecnologia | Por quê |
 |---|---|---|
-| Backend | Flask | Leve, direto, ideal para o porte do projeto |
-| Banco de dados | SQLite | Sem necessidade de servidor separado, suficiente para o volume de dados esperado |
-| Frontend | HTML5 + CSS3 | Controle total do layout, sem dependência de frameworks pesados |
-| Autenticação | Flask-Login | Proteção da área administrativa |
-| Formulários | Flask-WTF | Proteção CSRF nativa |
-
-*(edite a coluna "Por quê" com sua própria justificativa — isso é o que mostra maturidade técnica pra quem for avaliar seu portfólio)*
+| Backend | Flask 3.x | Leve e direto, ideal para o porte do projeto |
+| Banco de dados | SQLite | Sem servidor separado; suficiente para o volume esperado |
+| Frontend | HTML5 + CSS3 + JS vanilla | Controle total do layout, sem frameworks pesados |
+| Autenticação | Flask-Login | Sessões e proteção de rotas (usuário e admin) |
+| Proteção CSRF | itsdangerous (nativa do Flask) | Token assinado por sessão em todos os formulários POST |
 
 ## 🗂️ Estrutura do projeto
 
 ```
-projeto-imoveis/
-├── app/
-│   ├── __init__.py
-│   ├── models.py          # Modelos do banco (Imovel, Foto, Usuario)
-│   ├── routes.py          # Rotas principais
-│   ├── admin/              # Blueprint da área administrativa
-│   ├── templates/
-│   └── static/
-│       ├── css/
-│       ├── js/
-│       └── uploads/        # Fotos dos imóveis
-├── docs/
-│   ├── ARQUITETURA.md
-│   ├── BANCO_DE_DADOS.md
-│   └── DECISOES.md
-├── tests/
-├── .env.example
-├── .gitignore
-├── requirements.txt
-├── config.py
-├── run.py
-└── README.md
+batista-imoveis/
+├── README.md
+├── documentação/
+│   ├── BD.pdf                 # Diagrama do banco de dados
+│   └── modelo logico.txt      # Modelo lógico das tabelas
+└── src/
+    ├── run.py                 # Inicialização (cria tabelas e sobe o servidor)
+    ├── requirements.txt       # Dependências
+    ├── config.py              # Configuração + limites de segurança de upload
+    ├── banco.db               # Banco SQLite (gerado automaticamente)
+    ├── .env                   # Variáveis sensíveis (SECRET_KEY) — não versionar
+    ├── app/
+    │   ├── __init__.py        # create_app + proteção CSRF global
+    │   ├── models.py          # Modelos: Usuario, ADM, Imovel, Foto, Favorito, Historico
+    │   ├── routes/
+    │   │   ├── auth.py        # Cadastro, login (usuário e admin), logout
+    │   │   └── public.py      # Home, detalhe, favoritos, histórico, admin de imóveis
+    │   ├── templates/         # Páginas HTML (Jinja2)
+    │   └── static/
+    │       ├── css/style.css  # Estilos (paleta terracota/madeira/papel)
+    │       ├── js/upload.js   # Adicionar múltiplas fotos com pré-visualização
+    │       └── uploads/       # Fotos dos imóveis
 ```
 
 ## 🗃️ Modelo de dados (resumo)
 
-Descreva aqui as tabelas principais. Exemplo:
+**Usuario** — id, nome, email, senha (hash)
 
-**Imovel**
-- id, título, descrição, preço, tipo (casa/apto/terreno), bairro, quartos, banheiros, área, status (disponível/vendido/alugado)
+**ADM** — id, nome, email, senha (hash) — administrador do site
 
-**Foto**
-- id, imovel_id (FK), caminho_arquivo, ordem
+**Imovel** — id, nome, descricao, preco, localizacao, tipo, finalidade (`venda`/`aluguel`), quartos, banheiros, area, status (`disponivel`/`vendido`/`alugado`)
 
-**Usuario**
-- id, email, senha_hash (apenas o administrador do site)
+**Foto** — id, imovel_id (FK), url (um imóvel pode ter várias fotos, limitadas a 10)
 
-*(link para `docs/BANCO_DE_DADOS.md` com o diagrama completo, se fizer um)*
+**Favorito** — id, usuario_id (FK), imovel_id (FK), com unicidade por par usuário/imóvel
+
+**Historico** — id, usuario_id (FK), imovel_id (FK), data_acesso
+
+O modelo lógico completo está em `documentação/modelo logico.txt` e o diagrama em `documentação/BD.pdf`.
 
 ## 🚀 Como rodar localmente
 
 ```bash
-# Clonar o repositório
-git clone [url-do-repo]
-cd projeto-imoveis
+cd src
 
-# Criar e ativar ambiente virtual
+# Opção A — usar o Python do sistema (é o que tem Flask instalado)
+python3 run.py
+
+# Opção B — com ambiente virtual
 python3 -m venv venv
-source venv/bin/activate
-
-# Instalar dependências
-pip install -r requirements.txt
-
-# Configurar variáveis de ambiente
-cp .env.example .env
-# edite o .env com suas configurações
-
-# Rodar migrações / criar banco
-flask db upgrade   # ou o comando que você usar para criar as tabelas
-
-# Rodar o servidor
-flask run
+venv/bin/pip install -r requirements.txt
+venv/bin/python run.py
 ```
 
-## 🔒 Segurança
+> Acesse `http://localhost:5000`. As tabelas são criadas automaticamente na primeira execução (`db.create_all()`).
 
-Liste o que foi implementado — isso é ótimo para o portfólio:
-- Senhas com hash (werkzeug.security)
-- Proteção CSRF nos formulários (Flask-WTF)
-- Validação de upload de arquivos (extensão, tamanho, renomeação)
-- Variáveis sensíveis fora do código (.env)
-- Queries parametrizadas / uso de ORM
+> **Login de administrador**: o acesso admin é feito pela rota `/admin/login`. O primeiro administrador precisa ser criado direto na tabela `adm` do banco (o cadastro público cria apenas usuários comuns). Exemplo:
+> ```bash
+> python3 -c "
+> from app import create_app
+> from app.models import db, ADM
+> app = create_app()
+> with app.app_context():
+>     adm = ADM(nome='Admin', email='admin@email.com')
+>     adm.set_senha('sua-senha')
+>     db.session.add(adm); db.session.commit()
+> "
+> ```
 
-## 🌐 Deploy
+## 🔒 Segurança implementada
 
-- **Ambiente**: [Render / PythonAnywhere / VPS]
-- **URL**: [link do site no ar]
-- Descreva brevemente o processo de deploy escolhido e por quê.
+- **Senhas com hash** — `werkzeug.security` (nenhuma senha em texto puro no banco)
+- **Proteção CSRF** — token assinado por sessão (itsdangerous) validado em **todo** formulário POST no `before_request`; requisições sem token válido recebem HTTP 400
+- **Validação de upload** — extensão permitida + verificação de **conteúdo real** (magic bytes de JPEG/PNG/WEBP), impedindo arquivos renomeados
+- **Limites de upload** — no máximo **10 fotos por imóvel**, **5 MB por foto** e **16 MB por requisição** (`config.py` → `MAX_CONTENT_LENGTH`)
+- **Nome de arquivos saneado** — `secure_filename` + prefixo do id do imóvel (evita colisão e path traversal)
+- **Variáveis sensíveis fora do código** — `SECRET_KEY` no `.env`
+- **Queries parametrizadas / uso de ORM** — SQLAlchemy, sem concatenação de SQL
 
-## 📌 Decisões técnicas e aprendizados
+## 📌 Decisões técnicas
 
-Um resumo curto aqui, com link para `docs/DECISOES.md` para o detalhe completo. Exemplos de coisas para registrar:
-- Por que SQLite em vez de Postgres nesse estágio
-- Algum desafio que você resolveu (ex: upload de imagens, busca com filtros)
-- O que você faria diferente numa próxima versão
+- **SQLite em vez de Postgres**: sem infraestrutura extra, suficiente para o volume do projeto; fácil de trocar depois via `DATABASE_URL`.
+- **Múltiplas fotos por imóvel**: tabela `Foto` separada com FK para `Imovel`, permitindo galeria de N fotos com limite para proteger o servidor.
+- **CSRF sem Flask-WTF**: token assinado com `itsdangerous` (já é dependência do Flask), evitando adicionar uma biblioteca e um ciclo de formulários externos.
+- **Thumbnails na galeria**: foto principal + miniaturas trocáveis via JavaScript puro, sem biblioteca de carrossel.
 
 ## 📷 Screenshots
 
-*(adicione prints do site aqui quando estiver pronto — página inicial, listagem, detalhes do imóvel, admin)*
+*(adicione prints do site quando estiver pronto — página inicial, detalhe do imóvel e área admin)*
 
 ## 👤 Autor
 
-[Seu nome] — desenvolvido como projeto de portfólio após conclusão do curso técnico em [curso].
+Projeto de portfólio desenvolvido após a conclusão do curso técnico.
 [LinkedIn] | [GitHub] | [Portfólio]
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT — veja o arquivo [LICENSE](LICENSE) para detalhes.
