@@ -45,6 +45,7 @@
 
     <section class="hero">
         <h1>Encontre o imóvel certo, no seu bairro.</h1>
+        <p class="hero-sub">Casas, apartamentos e kitnets em venda ou aluguel na sua região.</p>
 
         <form class="filtro" action="{{ url_for('public.home') }}" method="GET">
             <div class="campo">
@@ -94,7 +95,7 @@
                 {% else %}
                     <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
                 {% endif %}
-                <span class="badge-finalidade">{{ imovel.finalidade }}</span>
+                <span class="badge-finalidade badge-{{ imovel.finalidade }}">{{ imovel.finalidade }}</span>
                 {% if imovel.fotos %}<span class="contador-fotos">📷 {{ imovel.fotos|length }}</span>{% endif %}
             </div>
             <div class="texto">

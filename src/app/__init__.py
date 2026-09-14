@@ -2,10 +2,15 @@ import secrets
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import Flask, session, request, abort
 from flask_login import LoginManager
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from config import Config
 from app.models import db, ADM, Usuario
 
 login_manager = LoginManager()
+
+# Rate limiting contra brute force/spam em login e cadastro.
+limiter = Limiter(key_func=get_remote_address)
 
 SALT_CSRF = 'csrf-jb-imoveis'
 
@@ -47,7 +52,8 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.loguin'
+    limiter.init_app(app)
 
     # Proteção CSRF: injeta o token em todos os templates e valida em todo POST.
     @app.context_processor

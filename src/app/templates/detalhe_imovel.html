@@ -12,6 +12,12 @@
             {% else %}
                 <img id="foto-principal" src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
             {% endif %}
+            <form method="POST" action="{{ url_for('public.favoritar', id=imovel.id) }}" class="favoritar-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="favoritar{% if ja_favoritado %} ativo{% endif %}" aria-label="Favoritar imóvel">
+                    {% if ja_favoritado %}♥{% else %}♡{% endif %}
+                </button>
+            </form>
         </div>
 
         {% if imovel.fotos|length > 1 %}
@@ -27,7 +33,10 @@
     </div>
 
     <div class="detalhe-info">
-        <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
+        <div class="preco-linha">
+            <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
+            <span class="badge-status badge-{{ imovel.status }}">{{ imovel.status }}</span>
+        </div>
         <h1>{{ imovel.nome }}</h1>
         <p class="localizacao">{{ imovel.localizacao }}</p>
 
@@ -44,17 +53,6 @@
             <button>WhatsApp</button>
             <button>E-mail</button>
         </div>
-    </div>
-
-    <div class="favoritar">
-
-        <form method="POST" action="{{ url_for('public.favoritar', id=imovel.id) }}" style="display:inline">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="favoritar">
-                {% if ja_favoritado %}♥{% else %}♡{% endif %}
-            </button>
-        </form>
-
     </div>
 
 </section>

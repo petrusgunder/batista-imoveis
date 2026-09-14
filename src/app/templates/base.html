@@ -17,24 +17,26 @@
         <div class="logo">
             <a href="{{ url_for('public.home') }}">JB <span>Imóveis</span></a>
         </div>
-        <nav class="pesquisa">
-            <a href="{{ url_for('public.home') }}">Início</a>
-            <a href="{{ url_for('public.loguin') }}">Cadastro</a>
-            <a href="{{ url_for('public.carrinho') }}" aria-label="Favoritos">
 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
-                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                </svg>
-
-            </a>
-            <a href="{{ url_for('public.menu_dos_menus') }}">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                </svg>
-
-            </a>
-        </nav>
+        <div class="header-controles">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-principal">
+                ☰
+            </button>
+            <nav class="pesquisa" id="nav-principal">
+                <a href="{{ url_for('public.home') }}">Início</a>
+                <a href="{{ url_for('public.loguin') }}">Entrar</a>
+                <a href="{{ url_for('public.carrinho') }}" aria-label="Favoritos">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                </a>
+                <a href="{{ url_for('public.menu_dos_menus') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                    </svg>
+                </a>
+            </nav>
+        </div>
     </header>
 
     <main>
@@ -51,8 +53,46 @@
     {% endwith %}
 
     <footer class="site-footer">
-        <p>&copy; 2026 JB Imóveis</p>
+        <div class="footer-inner">
+            <div class="footer-coluna footer-brand">
+                <a href="{{ url_for('public.home') }}" class="footer-logo">JB <span>Imóveis</span></a>
+                <p class="footer-desc">Imóveis de qualidade em venda e aluguel, com atendimento que conhece cada bairro da cidade.</p>
+            </div>
+
+            <nav class="footer-coluna footer-menu">
+                <p class="footer-titulo">Navegação</p>
+                <a href="{{ url_for('public.home') }}">Início</a>
+                <a href="{{ url_for('public.cadastro') }}">Criar conta</a>
+                <a href="{{ url_for('public.loguin') }}">Entrar</a>
+                <a href="{{ url_for('public.menu_dos_menus') }}">Configurações</a>
+                <a href="{{ url_for('public.colaborador') }}">Ser colaborador</a>
+            </nav>
+
+            <div class="footer-coluna footer-contato">
+                <p class="footer-titulo">Contato</p>
+                <p>contato@jbimoveis.com</p>
+                <p>Seg – Sex · 8h – 18h</p>
+            </div>
+        </div>
+
+        <div class="footer-base">
+            &copy; 2026 JB Imóveis. Todos os direitos reservados.
+        </div>
     </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggle = document.getElementById('menu-toggle');
+        const nav = document.getElementById('nav-principal');
+        if (toggle && nav) {
+            toggle.addEventListener('click', () => {
+                const aberto = nav.classList.toggle('aberto');
+                toggle.setAttribute('aria-expanded', String(aberto));
+                toggle.textContent = aberto ? '✕' : '☰';
+            });
+        }
+    });
+    </script>
 
 </body>
 </html>

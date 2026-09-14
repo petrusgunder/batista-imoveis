@@ -26,10 +26,10 @@
                         <div class="descricao">Status: {{ imovel.status }}</div>
                     </div>
                     <div class="contatos">
-                        <a href="{{ url_for('public.editar_imovel', id=imovel.id) }}"><button>Editar</button></a>
+                        <a href="{{ url_for('public.editar_imovel', id=imovel.id) }}"><button class="btn-secundario">Editar</button></a>
                         <form method="POST" action="{{ url_for('public.excluir_imovel', id=imovel.id) }}" onsubmit="return confirm('Excluir este imóvel? Essa ação não pode ser desfeita.')">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit">Excluir</button>
+                            <button type="submit" class="btn-perigo">Excluir</button>
                         </form>
                     </div>
                 </div>

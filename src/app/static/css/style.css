@@ -1,35 +1,50 @@
 /* ==========================================================================
-   JB Imóveis — tokens de design
-   Paleta inspirada em telha de barro queimada: terracota escuro sobre
-   tons de madeira e papel, em vez do laranja-cartaz genérico.
+   JB Imóveis — design tokens (Opção A: terracota refinada)
+   Identidade preservada: telha de barro, madeira escura, papel quente.
+   Profundidade extra, espaçamento generoso, estado hover mais presente.
    ========================================================================== */
 
 :root {
-    --ink: #241a13;          /* madeira escura / tijolo queimado */
-    --ink-soft: #4a382c;
-    --paper: #faf6ef;        /* papel — leve puxado pro amarelo, não cinza-frio */
-    --sand: #e9dcc6;         /* neutro de apoio — bordas, divisores */
+    --ink: #1e1610;          /* madeira escura / tijolo queimado (mais profundo) */
+    --ink-soft: #4a3a2c;
+    --paper: #faf8f4;        /* papel quase branco, menos amarelado que antes */
+    --sand: #e6dcc8;         /* neutro de apoio — bordas, divisores */
+    --surface: #ffffff;      /* superfícies elevadas (cards, modais) */
+
     --terracotta: #b8481f;   /* cor de telha — acento principal */
-    --terracotta-deep: #8a3416;
-    --terracotta-soft: #f1d9c8;
-    --sage: #5c6b4f;         /* verde-oliva — apoio raro, "disponível" etc */
+    --terracotta-deep: #7d2f12;
+    --terracotta-soft: #f4dcca;
+
+    --sage: #5c6b4f;         /* verde-oliva — apoio raro */
+    --accent: #2d5a3d;       /* verde profundo — "venda", sucesso, CTA secundária */
+    --accent-soft: #e4efe4;
+
+    --danger: #a3311b;
+    --danger-soft: #fbe4de;
 
     --serif: "Fraunces", Georgia, serif;
-    --sans: "Work Sans", -apple-system, sans-serif;
+    --sans: "Work Sans", -apple-system, "Segoe UI", sans-serif;
 
     --radius: 6px;
     --radius-lg: 22px 6px 22px 6px; /* assimétrico — assinatura visual do site */
 
     /* sombras em camadas — mais profundidade, menos "chapado" */
-    --sombra-suave: 0 1px 2px rgba(36, 26, 19, 0.06), 0 12px 28px -16px rgba(36, 26, 19, 0.18);
-    --sombra-media: 0 2px 4px rgba(36, 26, 19, 0.06), 0 22px 48px -20px rgba(36, 26, 19, 0.28);
-    --sombra-alta: 0 4px 10px rgba(36, 26, 19, 0.08), 0 32px 64px -24px rgba(36, 26, 19, 0.35);
+    --sombra-suave: 0 1px 2px rgba(30, 22, 16, 0.06), 0 12px 28px -16px rgba(30, 22, 16, 0.18);
+    --sombra-media: 0 2px 4px rgba(30, 22, 16, 0.06), 0 22px 48px -20px rgba(30, 22, 16, 0.28);
+    --sombra-alta: 0 4px 10px rgba(30, 22, 16, 0.08), 0 32px 64px -24px rgba(30, 22, 16, 0.35);
+
+    /* transições padrão */
+    --transicao: 0.2s ease;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,10 +57,22 @@ body {
     background-attachment: fixed;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 a {
     color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
 }
 
 :focus-visible {
@@ -60,15 +87,16 @@ a {
 .site-header {
     background: var(--ink);
     color: var(--paper);
-    padding: 18px 32px;
+    padding: 16px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
     border-bottom: 3px solid var(--terracotta);
     position: sticky;
     top: 0;
-    z-index: 50;
-    box-shadow: 0 10px 30px -18px rgba(36, 26, 19, 0.5);
+    z-index: 60;
+    box-shadow: 0 10px 30px -18px rgba(30, 22, 16, 0.5);
 }
 
 .logo a {
@@ -77,6 +105,8 @@ a {
     font-weight: 500;
     text-decoration: none;
     letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: baseline;
 }
 
 .logo span {
@@ -84,20 +114,83 @@ a {
     font-style: italic;
 }
 
+.header-controles {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 nav.pesquisa {
     display: flex;
-    gap: 28px;
+    align-items: center;
+    gap: 26px;
 }
 
 nav.pesquisa a {
+    position: relative;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--sand);
     transition: color 0.15s ease;
+    padding: 6px 2px;
+}
+
+/* sublinhado animado nos links do menu */
+nav.pesquisa a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--terracotta);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+    border-radius: 2px;
 }
 
 nav.pesquisa a:hover {
+    color: var(--paper);
+}
+
+nav.pesquisa a:hover::after {
+    transform: scaleX(1);
+}
+
+nav.pesquisa svg {
+    display: block;
+    transition: transform 0.15s ease;
+}
+
+nav.pesquisa a:hover svg {
+    transform: translateY(-1px);
+}
+
+.pesquisa {
+    align-items: center;
+}
+
+/* botão hambúrguer — visível apenas em mobile */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid rgba(250, 248, 244, 0.25);
+    border-radius: var(--radius);
+    color: var(--sand);
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.menu-toggle:hover {
+    background: rgba(250, 248, 244, 0.1);
     color: var(--paper);
 }
 
@@ -106,28 +199,36 @@ nav.pesquisa a:hover {
    ========================================================================== */
 
 .hero {
-    max-width: 960px;
+    max-width: 980px;
     margin: 0 auto;
-    padding: 72px 24px 100px;
+    padding: 76px 24px 96px;
     text-align: center;
 }
 
 .hero h1 {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    line-height: 1.12;
     letter-spacing: -0.01em;
     color: var(--ink);
     max-width: 20ch;
-    margin: 0 auto 40px;
+    margin: 0 auto 14px;
+}
+
+.hero-sub {
+    max-width: 46ch;
+    margin: 0 auto 42px;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
 }
 
 .filtro {
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--sand);
     border-radius: var(--radius-lg);
-    box-shadow: 0 18px 40px -18px rgba(36, 26, 19, 0.25);
-    padding: 28px 24px 24px;
+    box-shadow: var(--sombra-alta);
+    padding: 30px 26px 26px;
     display: flex;
     flex-wrap: wrap;
     gap: 18px;
@@ -140,8 +241,8 @@ nav.pesquisa a:hover {
     content: "";
     position: absolute;
     top: 0;
-    left: 24px;
-    right: 24px;
+    left: 26px;
+    right: 26px;
     height: 3px;
     background: var(--terracotta);
     border-radius: 0 0 3px 3px;
@@ -167,82 +268,112 @@ nav.pesquisa a:hover {
 }
 
 .campo input,
-.campo select {
+.campo select,
+.campo textarea,
+.auth-card input,
+.auth-card select,
+.auth-card textarea,
+.config-secao input,
+.config-secao textarea {
     font-family: var(--sans);
     font-size: 0.95rem;
     color: var(--ink);
     background: var(--paper);
     border: 1px solid var(--sand);
     border-radius: var(--radius);
-    padding: 11px 12px;
+    padding: 12px 13px;
+    width: 100%;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
-.campo input::placeholder {
-    color: #a99a86;
+.campo textarea,
+.auth-card textarea,
+.config-secao textarea {
+    resize: vertical;
+}
+
+.campo input::placeholder,
+.auth-card input::placeholder,
+.config-secao input::placeholder {
+    color: #b3a48f;
 }
 
 .campo input:focus,
-.campo select:focus {
+.campo select:focus,
+.campo textarea:focus,
+.auth-card input:focus,
+.auth-card select:focus,
+.auth-card textarea:focus,
+.config-secao input:focus,
+.config-secao textarea:focus {
     outline: none;
     border-color: var(--terracotta);
-    background: #fff;
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(184, 72, 31, 0.12);
 }
 
-.filtro button {
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #fff;
-    background: var(--terracotta);
-    border: none;
-    border-radius: var(--radius);
-    padding: 12px 26px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-    white-space: nowrap;
+.campo-ajuda {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.5;
 }
 
-.filtro button:hover {
-    background: var(--terracotta-deep);
-}
 /* ==========================================================================
-   Imóveis em Destaque
+   Imóveis em Destaque — grid de cards
    ========================================================================== */
 
-.imoveis-em-destaque {
+.imoveis-em-destaque,
+.grid-imoveis {
     max-width: 1120px;
     margin: 0 auto;
     padding: 0 24px 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
 }
 
-.imoveis-em-destaque h2 {
+.imoveis-em-destaque > h2,
+.grid-imoveis > h2 {
+    grid-column: 1 / -1;
     font-family: var(--serif);
     font-size: 1.75rem;
     font-weight: 500;
     color: var(--ink);
-    margin-bottom: 32px;
+    margin-bottom: 4px;
 }
 
-.grid-imoveis {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 28px;
+@media (max-width: 900px) {
+    .imoveis-em-destaque,
+    .grid-imoveis {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
+@media (max-width: 560px) {
+    .imoveis-em-destaque,
+    .grid-imoveis {
+        grid-template-columns: 1fr;
+        padding: 0 16px 56px;
+    }
+}
+
+/* card de imóvel */
 .imovel {
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--sand);
     border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: var(--sombra-suave);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .imovel:hover {
     transform: translateY(-6px);
     box-shadow: var(--sombra-media);
+    border-color: #d8c9ae;
 }
 
 .imovel .imagem {
@@ -253,9 +384,11 @@ nav.pesquisa a:hover {
     overflow: hidden;
 }
 
-.imovel .imagem img {
+.imovel .imagem img,
+.carrossel-card img {
     width: 100%;
     height: 100%;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
@@ -269,15 +402,47 @@ nav.pesquisa a:hover {
     position: absolute;
     top: 12px;
     left: 12px;
-    background: rgba(36, 26, 19, 0.82);
+    background: rgba(30, 22, 16, 0.82);
     color: var(--paper);
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 5px 11px;
+    padding: 6px 12px;
     border-radius: 999px;
     backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px -2px rgba(30, 22, 16, 0.4);
+}
+
+/* cor por finalidade — Venda em verde profundo, Aluguel em terracota */
+.badge-finalidade.badge-venda {
+    background: var(--accent);
+}
+
+.badge-finalidade.badge-aluguel {
+    background: var(--terracotta-deep);
+}
+
+/* selo de status (disponível / vendido / alugado) */
+.badge-status {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 5px 12px;
+    border-radius: 999px;
+}
+
+.badge-status.badge-disponivel {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.badge-status.badge-vendido,
+.badge-status.badge-alugado {
+    background: var(--danger-soft);
+    color: var(--danger);
 }
 
 /* contador de fotos no canto oposto */
@@ -285,20 +450,21 @@ nav.pesquisa a:hover {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     color: var(--ink);
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 5px 11px;
     border-radius: 999px;
-    box-shadow: 0 2px 8px -2px rgba(36, 26, 19, 0.3);
+    box-shadow: 0 2px 8px -2px rgba(30, 22, 16, 0.3);
+    backdrop-filter: blur(2px);
 }
 
 .btn-favorito {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid var(--sand);
     border-radius: 50%;
     width: 38px;
@@ -313,12 +479,12 @@ nav.pesquisa a:hover {
 
 .btn-favorito:hover {
     color: var(--terracotta);
-    background: #fff;
+    background: var(--surface);
     transform: scale(1.05);
 }
 
 .imovel .texto {
-    padding: 20px;
+    padding: 20px 20px 18px;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -330,18 +496,26 @@ nav.pesquisa a:hover {
     font-size: 1.55rem;
     font-weight: 600;
     color: var(--terracotta-deep);
+    line-height: 1.1;
+}
+
+.valor .preco {
+    margin: 0;
 }
 
 .dados {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 6px 10px;
     font-size: 0.82rem;
     color: var(--ink-soft);
     font-weight: 500;
     border-bottom: 1px solid var(--sand);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
 }
 
+/* separador "•" entre os dados — funciona com <p> e <span> */
+.dados p:not(:last-child)::after,
 .dados span:not(:last-child)::after {
     content: "•";
     margin-left: 10px;
@@ -362,7 +536,7 @@ nav.pesquisa a:hover {
 .descricao {
     font-size: 0.88rem;
     color: var(--ink-soft);
-    line-height: 1.4;
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -374,7 +548,7 @@ nav.pesquisa a:hover {
     margin-top: auto;
     display: flex;
     gap: 10px;
-    padding-top: 10px;
+    padding-top: 12px;
 }
 
 .contatos a {
@@ -388,525 +562,11 @@ nav.pesquisa a:hover {
     transition: all 0.15s ease;
 }
 
-.btn-whatsapp {
-    background: var(--sage);
-    color: #fff;
-}
-
-.btn-whatsapp:hover {
-    background: #49563e;
-}
-
-.btn-email {
-    background: var(--paper);
-    color: var(--ink);
-    border: 1px solid var(--sand);
-}
-
-.btn-email:hover {
-    background: var(--sand);
-}
-
 /* ==========================================================================
-   Footer
+   Botões
    ========================================================================== */
 
-.site-footer {
-    background: var(--ink);
-}
-
-.site-footer p {
-    color: var(--sand);
-    text-align: center;
-    padding: 22px;
-    font-size: 0.85rem;
-}
-
-/* ==========================================================================
-   Responsivo
-   ========================================================================== */
-
-@media (max-width: 640px) {
-    .site-header {
-        flex-direction: column;
-        gap: 14px;
-        text-align: center;
-    }
-
-    .filtro {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filtro button {
-        width: 100%;
-    }
-}
-
- 
-
- 
-/* ==========================================================================
-   Auth (cadastro / login)
-   ========================================================================== */
- 
-   .auth {
-    min-height: 20vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 24px;
-}
- 
-.auth-card {
-    width: 100%;
-    max-width: 400px;
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 18px 40px -18px rgba(36, 26, 19, 0.25);
-    padding: 36px 32px 28px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
- 
-.auth-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 32px;
-    right: 32px;
-    height: 3px;
-    background: var(--terracotta);
-    border-radius: 0 0 3px 3px;
-}
- 
-.auth-card h1 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 1.7rem;
-    color: var(--ink);
-}
- 
-.auth-sub {
-    font-size: 0.9rem;
-    color: var(--ink-soft);
-    margin-top: -8px;
-}
- 
- 
-.auth-card > button[type="submit"] {
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #fff;
-    background: var(--terracotta);
-    border: none;
-    border-radius: var(--radius);
-    padding: 13px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-    margin-top: 8px;
-}
-
-.auth-card > button[type="submit"]:hover {
-    background: var(--terracotta-deep);
-}
- 
-.auth-alt {
-    font-size: 0.85rem;
-    text-align: center;
-    color: var(--ink-soft);
-}
- 
-.auth-alt a {
-    color: var(--terracotta);
-    font-weight: 600;
-    text-decoration: none;
-}
- 
-.auth-alt a:hover {
-    text-decoration: underline;
-}
- 
-/* ==========================================================================
-   Menu da conta (dropdown dos três pontos)
-   ========================================================================== */
- 
-   .pesquisa {
-    align-items: center;
-}
- 
-.pesquisa svg {
-    display: block;
-}
- 
-.menu-conta {
-    position: relative;
-}
- 
-.menu-conta-toggle {
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    border-radius: var(--radius);
-}
- 
-.menu-conta-toggle:hover {
-    background: rgba(250, 246, 239, 0.1);
-}
- 
-.menu-conta-lista {
-    list-style: none;
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    min-width: 220px;
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: var(--radius);
-    box-shadow: 0 18px 40px -14px rgba(36, 26, 19, 0.35);
-    padding: 8px;
-    display: none;
-    z-index: 20;
-}
- 
-.menu-conta.aberto .menu-conta-lista {
-    display: block;
-}
- 
-.menu-conta-lista li a {
-    display: block;
-    padding: 10px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.88rem;
-    color: var(--ink);
-}
- 
-.menu-conta-lista li a:hover {
-    background: var(--terracotta-soft);
-    color: var(--terracotta-deep);
-}
- 
-.menu-conta-lista .menu-divisor {
-    height: 1px;
-    background: var(--sand);
-    margin: 6px 4px;
-}
- 
-.menu-conta-lista .menu-perigo {
-    color: #a3311b;
-}
- 
-.menu-conta-lista .menu-perigo:hover {
-    background: #fbe4de;
-    color: #7c2413;
-} 
-/* ==========================================================================
-   Páginas de lista (favoritos / histórico)
-   ========================================================================== */
- 
-.pagina-lista {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 48px 24px;
-}
- 
-.pagina-lista h1 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 2rem;
-    color: var(--ink);
-}
- 
-.pagina-sub {
-    color: var(--ink-soft);
-    margin: 6px 0 32px;
-}
- 
-.auth-card textarea {
-    font-family: var(--sans);
-    font-size: 0.95rem;
-    color: var(--ink);
-    background: var(--paper);
-    border: 1px solid var(--sand);
-    border-radius: var(--radius);
-    padding: 11px 12px;
-    resize: vertical;
-}
- 
-.auth-card textarea:focus {
-    outline: none;
-    border-color: var(--terracotta);
-    background: #fff;
-}
-
-/* ==========================================================================
-   Configurações (sidebar + conteúdo, no padrão da referência do GitHub)
-   ========================================================================== */
- 
-.config {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 56px;
-}
- 
-.config-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-}
- 
-.config-grupo-titulo {
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink-soft);
-    margin-bottom: 8px;
-}
- 
-.config-menu ul {
-    list-style: none;
-}
- 
-.config-menu a {
-    display: block;
-    padding: 8px 10px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    color: var(--ink-soft);
-    border-left: 2px solid transparent;
-}
- 
-.config-menu a:hover {
-    background: var(--terracotta-soft);
-    color: var(--terracotta-deep);
-}
- 
-.config-menu a.ativo {
-    color: var(--terracotta-deep);
-    border-left-color: var(--terracotta);
-    background: var(--terracotta-soft);
-    font-weight: 600;
-}
- 
-.config-link-perigo {
-    color: #a3311b !important;
-}
- 
-.config-link-perigo:hover {
-    background: #fbe4de !important;
-    color: #7c2413 !important;
-}
- 
-.config-conteudo {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
- 
-.config-secao {
-    border: 1px solid var(--sand);
-    border-radius: var(--radius);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
- 
-.config-secao h1 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 1.5rem;
-}
- 
-.config-secao h2 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 1.2rem;
-}
- 
-.config-sub {
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    margin-top: -8px;
-}
- 
-.config-secao .campo {
-    max-width: 360px;
-}
- 
-.config-btn {
-    align-self: flex-start;
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #fff;
-    background: var(--terracotta);
-    border: none;
-    border-radius: var(--radius);
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
- 
-.config-btn:hover {
-    background: var(--terracotta-deep);
-}
- 
-.config-btn-secundario {
-    color: var(--ink);
-    background: var(--paper);
-    border: 1px solid var(--sand);
-}
- 
-.config-btn-secundario:hover {
-    background: var(--sand);
-}
- 
-.config-zona-perigo {
-    border-color: #e3b3a4;
-    background: #fdf5f2;
-}
- 
-.config-btn-perigo {
-    background: #a3311b;
-}
- 
-.config-btn-perigo:hover {
-    background: #7c2413;
-}
- 
-@media (max-width: 720px) {
-    .config {
-        grid-template-columns: 1fr;
-    }
- 
-    .config-menu {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-}
-
-.carrossel-destaque {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 32px 24px 0;
-}
-
-.carrossel-destaque h2 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 1.3rem;
-    margin-bottom: 16px;
-}
-
-.carrossel-wrapper {
-    position: relative;
-    padding: 20px 44px; /* espaço nas laterais para as setas não ficarem sobre os cards */
-}
-
-.carrossel-track {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-}
-
-.carrossel-track {
-    padding: 0 20px; 
-}
-.carrossel-track::-webkit-scrollbar {
-    display: none;
-}
-
-.carrossel-card {
-    flex: 0 0 220px;
-    scroll-snap-align: start;
-    text-decoration: none;
-    color: var(--ink);
-    border: 1px solid var(--sand);
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: #fff;
-}
-
-.carrossel-card img {
-    width: 100%;
-    height: 130px;
-    object-fit: cover;
-    display: block;
-}
-
-.carrossel-card-info {
-    padding: 10px 12px;
-}
-
-.carrossel-card-info .preco {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.carrossel-card-info .localizacao {
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-}
-
-.carrossel-seta {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    background: var(--terracotta);
-    color: #fff;
-    font-size: 1.3rem;
-    cursor: pointer;
-    box-shadow: 0 6px 16px -6px rgba(36, 26, 19, 0.4);
-    z-index: 3;
-}
-
-.carrossel-seta:hover {
-    background: var(--terracotta-deep);
-}
-
-.carrossel-seta-esquerda {
-    left: 4px;
-}
-
-.carrossel-seta-direita {
-    right: 4px;
-}
-
-.carrossel-card {
-    transform: scale(0.85);
-    opacity: 0.55;
-    transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
-}
-
-.carrossel-card.ativo {
-    transform: scale(1.08);
-    opacity: 1;
-    box-shadow: 0 20px 40px -16px rgba(36, 26, 19, 0.35);
-    z-index: 2;
-}
-
+/* CTA dentro dos cards (Ver detalhes / Ver novamente) */
 .contatos button,
 .contatos a button {
     flex: 1;
@@ -917,25 +577,46 @@ nav.pesquisa a:hover {
     font-family: var(--sans);
     font-weight: 600;
     font-size: 0.85rem;
-    padding: 10px 14px;
+    padding: 11px 14px;
     border-radius: var(--radius);
     border: none;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background: var(--terracotta);
+    color: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .contatos button:hover,
 .contatos a button:hover {
+    background: var(--terracotta-deep);
     transform: translateY(-2px);
+    box-shadow: 0 8px 22px -10px rgba(184, 72, 31, 0.6);
 }
 
-/* mantém margin-top:auto da base (.contatos) para alinhar botões dos cards */
-.contatos {
-    display: flex;
-    gap: 10px;
+/* botão perigo (Excluir, na área administrativa) */
+.contatos .btn-perigo {
+    background: var(--danger);
 }
 
-/* WhatsApp — verde característico, mas dentro da paleta (não o verde puro do WhatsApp) */
+.contatos .btn-perigo:hover {
+    background: #7c2413;
+    box-shadow: 0 8px 22px -10px rgba(163, 49, 27, 0.6);
+}
+
+/* botão secundário de card (Editar) */
+.contatos .btn-secundario {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--sand);
+}
+
+.contatos .btn-secundario:hover {
+    background: var(--sand);
+    color: var(--ink);
+    box-shadow: none;
+}
+
+/* WhatsApp — verde característico, mas dentro da paleta */
 .contatos button:first-child {
     background: #4a7c59;
     color: #fff;
@@ -957,32 +638,527 @@ nav.pesquisa a:hover {
     box-shadow: 0 8px 20px -8px rgba(184, 72, 31, 0.5);
 }
 
-.favoritar {
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
+.gap { flex: 1; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+    background: var(--ink);
+    color: var(--sand);
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 48px 24px 36px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-logo {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--paper);
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.footer-logo span {
+    color: var(--terracotta);
+    font-style: italic;
+}
+
+.footer-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 34ch;
+}
+
+.footer-titulo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sand);
+    margin-bottom: 14px;
+    opacity: 0.8;
+}
+
+.footer-menu-links,
+.footer-contato-links,
+.footer-menu,
+.footer-contato {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-menu a,
+.footer-contato p {
+    color: #cfc4b2;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.15s ease;
+}
+
+.footer-menu a:hover {
+    color: var(--paper);
+}
+
+.footer-base {
+    border-top: 1px solid rgba(230, 220, 200, 0.12);
+    text-align: center;
+    padding: 18px 24px;
+    font-size: 0.82rem;
+    color: #9b8d79;
+}
+
+/* ==========================================================================
+   Auth (cadastro / login / admin / contato / colaborador)
+   ========================================================================== */
+
+.auth {
+    min-height: 60vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    color: var(--terracotta);
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease;
+    padding: 48px 24px;
 }
 
-.favoritar:hover {
-    background: var(--terracotta-soft);
-    transform: scale(1.1);
-}
-
-.imovel .imagem img,
-.carrossel-card img {
+.auth-card {
     width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--sombra-alta);
+    padding: 38px 34px 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 34px;
+    right: 34px;
+    height: 3px;
+    background: var(--terracotta);
+    border-radius: 0 0 3px 3px;
+}
+
+.auth-card h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: var(--ink);
+}
+
+.auth-sub {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin-top: -8px;
+    line-height: 1.5;
+}
+
+.auth-card > button[type="submit"],
+.auth-card > a button {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.auth-card > button[type="submit"]:hover,
+.auth-card > a button:hover {
+    background: var(--terracotta-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -12px rgba(184, 72, 31, 0.7);
+}
+
+.auth-alt {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--ink-soft);
+}
+
+.auth-alt a {
+    color: var(--terracotta);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-alt a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Menu da conta (dropdown dos três pontos) — mantido, ainda não vinculado
+   ========================================================================== */
+
+.menu-conta {
+    position: relative;
+}
+
+.menu-conta-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius);
+}
+
+.menu-conta-toggle:hover {
+    background: rgba(250, 246, 239, 0.1);
+}
+
+.menu-conta-lista {
+    list-style: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    background: var(--surface);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    box-shadow: 0 18px 40px -14px rgba(30, 22, 16, 0.35);
+    padding: 8px;
+    display: none;
+    z-index: 20;
+}
+
+.menu-conta.aberto .menu-conta-lista {
+    display: block;
+}
+
+.menu-conta-lista li a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    color: var(--ink);
+}
+
+.menu-conta-lista li a:hover {
+    background: var(--terracotta-soft);
+    color: var(--terracotta-deep);
+}
+
+.menu-conta-lista .menu-divisor {
+    height: 1px;
+    background: var(--sand);
+    margin: 6px 4px;
+}
+
+.menu-conta-lista .menu-perigo {
+    color: var(--danger);
+}
+
+.menu-conta-lista .menu-perigo:hover {
+    background: var(--danger-soft);
+    color: #7c2413;
+}
+
+/* ==========================================================================
+   Páginas de lista (favoritos / histórico / gerenciar)
+   ========================================================================== */
+
+.pagina-lista {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+}
+
+.pagina-lista h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 2.1rem;
+    color: var(--ink);
+}
+
+.pagina-sub {
+    color: var(--ink-soft);
+    margin: 6px 0 36px;
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Configurações (sidebar + conteúdo, no padrão da referência do GitHub)
+   ========================================================================== */
+
+.config {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+}
+
+.config-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.config-grupo-titulo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+}
+
+.config-menu ul {
+    list-style: none;
+}
+
+.config-menu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    border-left: 2px solid transparent;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.config-menu a:hover {
+    background: var(--terracotta-soft);
+    color: var(--terracotta-deep);
+}
+
+.config-menu a.ativo {
+    color: var(--terracotta-deep);
+    border-left-color: var(--terracotta);
+    background: var(--terracotta-soft);
+    font-weight: 600;
+}
+
+.config-link-perigo {
+    color: var(--danger) !important;
+}
+
+.config-link-perigo:hover {
+    background: var(--danger-soft) !important;
+    color: #7c2413 !important;
+}
+
+.config-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.config-secao {
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--surface);
+}
+
+.config-secao h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.config-secao h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.config-sub {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-top: -8px;
+}
+
+.config-secao .campo {
+    max-width: 380px;
+}
+
+.config-btn {
+    align-self: flex-start;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #fff;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius);
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.config-btn:hover {
+    background: var(--terracotta-deep);
+    transform: translateY(-1px);
+}
+
+.config-btn-secundario {
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--sand);
+}
+
+.config-btn-secundario:hover {
+    background: var(--sand);
+    color: var(--ink);
+    transform: none;
+}
+
+.config-zona-perigo {
+    border-color: #e3b3a4;
+    background: #fdf7f4;
+}
+
+.config-btn-perigo {
+    background: var(--danger);
+}
+
+.config-btn-perigo:hover {
+    background: #7c2413;
+}
+
+/* ==========================================================================
+   Carrossel "Mais visitados"
+   ========================================================================== */
+
+.carrossel-destaque {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 24px 0;
+}
+
+.carrossel-destaque h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+.carrossel-wrapper {
+    position: relative;
+    padding: 20px 44px;
+}
+
+.carrossel-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 0 20px;
+}
+
+.carrossel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carrossel-card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    transform: scale(0.85);
+    opacity: 0.55;
+    transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+}
+
+.carrossel-card img {
+    height: 130px;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    display: block;
+}
+
+.carrossel-card-info {
+    padding: 12px 14px;
+}
+
+.carrossel-card-info .preco {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--terracotta-deep);
+    font-family: var(--serif);
+}
+
+.carrossel-card-info .localizacao {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.carrossel-card.ativo {
+    transform: scale(1.06);
+    opacity: 1;
+    box-shadow: 0 20px 40px -16px rgba(30, 22, 16, 0.35);
+    z-index: 2;
+    border-color: #d8c9ae;
+}
+
+.carrossel-seta {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: var(--terracotta);
+    color: #fff;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 6px 16px -6px rgba(30, 22, 16, 0.4);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.carrossel-seta:hover {
+    background: var(--terracotta-deep);
+    transform: translateY(-50%) scale(1.06);
+}
+
+.carrossel-seta-esquerda {
+    left: 4px;
+}
+
+.carrossel-seta-direita {
+    right: 4px;
 }
 
 /* ==========================================================================
@@ -992,7 +1168,7 @@ nav.pesquisa a:hover {
 .detalhe-imovel {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 48px 24px 96px;
+    padding: 56px 24px 96px;
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     gap: 40px;
@@ -1007,6 +1183,7 @@ nav.pesquisa a:hover {
 }
 
 .galeria-principal {
+    position: relative;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--sombra-media);
@@ -1061,11 +1238,13 @@ nav.pesquisa a:hover {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--sand);
     border-radius: var(--radius-lg);
-    padding: 32px;
+    padding: 34px;
     box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 96px;
 }
 
 .detalhe-info .preco {
@@ -1073,6 +1252,15 @@ nav.pesquisa a:hover {
     font-size: 2rem;
     font-weight: 600;
     color: var(--terracotta-deep);
+    line-height: 1.1;
+}
+
+.detalhe-info .preco-linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .detalhe-info h1 {
@@ -1080,11 +1268,15 @@ nav.pesquisa a:hover {
     font-weight: 500;
     font-size: 1.8rem;
     color: var(--ink);
+    line-height: 1.15;
 }
 
 .detalhe-info .localizacao {
     color: var(--ink-soft);
     font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .detalhe-info .dados {
@@ -1095,20 +1287,59 @@ nav.pesquisa a:hover {
 .detalhe-info .descricao {
     font-size: 0.95rem;
     color: var(--ink-soft);
-    line-height: 1.6;
+    line-height: 1.65;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+/* ==========================================================================
+   Botão de favoritar — sobreposto ao canto inferior esquerdo da foto principal
+   ========================================================================== */
+
+.favoritar-form {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    margin: 0;
+    z-index: 2;
+}
+
+.favoritar-form .favoritar {
+    background: var(--surface);
+    border: 1px solid var(--sand);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--terracotta);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--sombra-media);
+}
+
+.favoritar-form .favoritar:hover {
+    background: var(--terracotta-soft);
+    transform: scale(1.08);
+}
+
+.favoritar-form .favoritar:active {
+    transform: scale(0.94);
+}
+
+.favoritar-form .favoritar.ativo {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: #fff;
 }
 
 /* ==========================================================================
    Upload de fotos — pré-visualização e fotos atuais na edição
    ========================================================================== */
 
-.campo-ajuda {
-    font-size: 0.78rem;
-    color: var(--ink-soft);
-    margin-top: 4px;
-}
-
-/* adicionar fotos uma a uma */
 #linhas-fotos {
     display: flex;
     flex-direction: column;
@@ -1146,7 +1377,7 @@ nav.pesquisa a:hover {
 }
 
 .btn-remover-linha:hover {
-    background: #a3311b;
+    background: var(--danger);
 }
 
 .btn-adicionar-foto {
@@ -1158,13 +1389,14 @@ nav.pesquisa a:hover {
     background: var(--terracotta-soft);
     border: 1px dashed var(--terracotta);
     border-radius: var(--radius);
-    padding: 9px 16px;
+    padding: 10px 18px;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .btn-adicionar-foto:hover {
     background: #e8c7b4;
+    transform: translateY(-1px);
 }
 
 .preview-fotos {
@@ -1216,8 +1448,8 @@ nav.pesquisa a:hover {
     font-family: var(--sans);
     font-weight: 600;
     font-size: 0.75rem;
-    color: #a3311b;
-    background: #fbe4de;
+    color: var(--danger);
+    background: var(--danger-soft);
     border: none;
     border-radius: var(--radius);
     padding: 5px 12px;
@@ -1234,8 +1466,13 @@ nav.pesquisa a:hover {
    ========================================================================== */
 
 .flash {
+    position: fixed;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: calc(100% - 32px);
     max-width: 560px;
-    margin: 24px auto;
     padding: 14px 18px;
     background: var(--terracotta-soft);
     border: 1px solid #e3b3a4;
@@ -1243,20 +1480,180 @@ nav.pesquisa a:hover {
     border-radius: var(--radius);
     color: var(--terracotta-deep);
     font-size: 0.9rem;
-    box-shadow: var(--sombra-suave);
+    box-shadow: var(--sombra-alta);
+    animation: flash-abaixar 0.3s ease;
 }
 
 .flash p {
     margin: 0;
 }
 
+@keyframes flash-abaixar {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
 /* ==========================================================================
-   Responsivo (detalhe + galeria)
+   Responsivo
    ========================================================================== */
+
+@media (max-width: 900px) {
+    .header-controles {
+        flex-direction: row-reverse;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    nav.pesquisa {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--ink);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 12px 24px 20px;
+        border-bottom: 3px solid var(--terracotta);
+        box-shadow: 0 24px 40px -20px rgba(30, 22, 16, 0.6);
+        display: none;
+    }
+
+    nav.pesquisa.aberto {
+        display: flex;
+    }
+
+    nav.pesquisa a {
+        padding: 12px 10px;
+        font-size: 0.95rem;
+        border-radius: var(--radius);
+    }
+
+    nav.pesquisa a::after {
+        display: none;
+    }
+
+    nav.pesquisa a:hover {
+        background: rgba(250, 248, 244, 0.08);
+    }
+
+    nav.pesquisa svg {
+        width: 18px;
+        height: 18px;
+    }
+}
 
 @media (max-width: 820px) {
     .detalhe-imovel {
         grid-template-columns: 1fr;
         padding: 32px 16px 72px;
+    }
+
+    .detalhe-info {
+        position: static;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .config {
+        grid-template-columns: 1fr;
+        padding: 40px 16px 72px;
+    }
+
+    .config-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .site-header {
+        flex-direction: row;
+        padding: 12px 16px;
+    }
+
+    .hero {
+        padding: 56px 16px 64px;
+    }
+
+    .hero h1 {
+        font-size: clamp(1.7rem, 6vw, 2.2rem);
+    }
+
+    .hero-sub {
+        font-size: 0.95rem;
+    }
+
+    .filtro {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 26px 20px 22px;
+    }
+
+    .filtro button {
+        width: 100%;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 40px 20px 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carrossel-card {
+        flex-basis: 200px;
+    }
+
+    .carrossel-wrapper {
+        padding: 16px 20px;
+    }
+
+    .carrossel-seta-esquerda {
+        left: -2px;
+    }
+
+    .carrossel-seta-direita {
+        right: -2px;
+    }
+
+    .auth {
+        padding: 32px 16px;
+    }
+
+    .auth-card {
+        padding: 30px 22px 24px;
+    }
+
+    .detalhe-info {
+        padding: 24px 18px;
+    }
+}
+
+/* ==========================================================================
+   Acessibilidade — respeita preferência por menos movimento
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

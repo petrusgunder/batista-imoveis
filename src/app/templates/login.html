@@ -6,6 +6,7 @@
 <section class="auth">
     <form class="auth-card" action="{{ url_for('auth.loguin') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
         <h1>Entrar</h1>
         <p class="auth-sub">Acesse seus favoritos e seu histórico de buscas.</p>
 

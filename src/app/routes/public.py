@@ -210,11 +210,19 @@ def editar_conta():
 @public_bp.route('/conta/trocar-senha', methods=['POST'])
 @login_required
 def trocar_senha():
-    senha_atual = request.form.get('senha_atual')
-    senha_nova = request.form.get('senha_nova')
+    senha_atual = request.form.get('senha_atual', '')
+    senha_nova = request.form.get('senha_nova', '')
 
     if not current_user.check_senha(senha_atual):
         flash('Senha atual incorreta.')
+        return redirect(url_for('public.menu_dos_menus'))
+
+    if len(senha_nova) < 8:
+        flash('A nova senha deve ter pelo menos 8 caracteres.')
+        return redirect(url_for('public.menu_dos_menus'))
+
+    if senha_nova == senha_atual:
+        flash('A nova senha deve ser diferente da atual.')
         return redirect(url_for('public.menu_dos_menus'))
 
     current_user.set_senha(senha_nova)
