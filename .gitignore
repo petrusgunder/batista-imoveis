@@ -2,6 +2,11 @@
 .env
 *.env
 
+# Firebase (login com Google) — chave privada da service account, NUNCA commitar
+firebase-service-account.json
+src/firebase-service-account.json
+*.private_key.json
+
 # Banco de dados local
 banco.db
 

@@ -1,6 +1,6 @@
 import secrets
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from flask import Flask, session, request, abort
+from flask import Flask, session, request, abort, render_template
 from flask_login import LoginManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -60,6 +60,29 @@ def create_app():
     def injetar_csrf():
         return dict(csrf_token=gerar_token_csrf)
 
+    @app.context_processor
+    def injetar_firebase():
+        """Config pública do Firebase (SDK JS) — None se ainda não configurado.
+
+        Com None, o template não renderiza o botão "Entrar com Google". Sempre
+        passada por referência: o código nunca injeta a chave da service account
+        (segredo) no navegador.
+        """
+        chaves = ('FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_PROJECT_ID',
+                  'FIREBASE_APP_ID', 'FIREBASE_STORAGE_BUCKET',
+                  'FIREBASE_MESSAGING_SENDER_ID')
+        valores = [app.config.get(k) for k in chaves]
+        if not all(valores):
+            return dict(firebase_config=None)
+        return dict(firebase_config={
+            'apiKey': valores[0],
+            'authDomain': valores[1],
+            'projectId': valores[2],
+            'appId': valores[3],
+            'storageBucket': valores[4],
+            'messagingSenderId': valores[5],
+        })
+
     @app.before_request
     def proteger_csrf():
         if request.method == 'POST':
@@ -72,5 +95,24 @@ def create_app():
 
     from app.routes.auth import auth_bp
     app.register_blueprint(auth_bp)
+
+    # Esquema: cria as tabelas e, em banco JÁ existente, acrescenta as colunas
+    # novas (google_id, picture) via ALTER — idempotente e sem tocar nos dados.
+    # Roda aqui para que qualquer entry point que construa o app encontre o
+    # banco no esquema que o código espera.
+    with app.app_context():
+        db.create_all()
+        from app.migrate import migrar_banco
+        migrar_banco()
+
+    # Páginas de erro amigáveis — em produção, um 500 cru com stack trace
+    # vaza detalhes internos pro visitante.
+    @app.errorhandler(404)
+    def pagina_nao_encontrada(e):
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+    def erro_interno(e):
+        return render_template('500.html'), 500
 
     return app

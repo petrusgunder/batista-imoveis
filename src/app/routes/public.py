@@ -1,19 +1,55 @@
-from flask import Blueprint, render_template, current_app
-from app.models import db, Imovel
-from flask import request, redirect, url_for
-from flask_login import login_required, current_user
+from flask import (
+    Blueprint, render_template, request, redirect, url_for,
+    current_app, abort, flash
+)
+from flask_login import login_required, current_user, logout_user
 from functools import wraps
-from flask import abort
-from flask_login import current_user
-from app.models import ADM
-from flask_login import logout_user
-from flask import flash
-from app.models import db, Imovel, Favorito, Historico
 from sqlalchemy import func
-from app.models import Historico
-import os
+from sqlalchemy.exc import IntegrityError
+from decimal import Decimal, InvalidOperation
 from werkzeug.utils import secure_filename
-from app.models import Foto
+import os
+
+from app.models import db, Imovel, Favorito, Historico, Foto, ADM, Usuario
+
+
+def validar_dados_imovel(dados):
+    """Valida o formulário de imóvel no servidor — evita que um campo vazio ou
+    numérico inválido (ex.: preco='abc') estoure um 500 na hora do INSERT.
+
+    Retorna lista de mensagens de erro (vazia = formulário válido).
+    """
+    erros = []
+
+    for campo in ('nome', 'descricao', 'localizacao', 'tipo', 'finalidade'):
+        if not (dados.get(campo) or '').strip():
+            erros.append(f'O campo "{campo}" é obrigatório.')
+
+    # preco e area: DECIMAL(10,2) no banco
+    for campo, rotulo in (('preco', 'preço'), ('area', 'área')):
+        valor = (dados.get(campo) or '').strip()
+        if not valor:
+            erros.append(f'O campo "{rotulo}" é obrigatório.')
+        else:
+            try:
+                if Decimal(valor) < 0:
+                    erros.append(f'O {rotulo} não pode ser negativo.')
+            except InvalidOperation:
+                erros.append(f'O {rotulo} deve ser um número válido (ex.: 250000.00).')
+
+    # quartos e banheiros: INTEGER no banco
+    for campo in ('quartos', 'banheiros'):
+        valor = (dados.get(campo) or '').strip()
+        if not valor:
+            erros.append(f'O campo "{campo}" é obrigatório.')
+        else:
+            try:
+                if int(valor) < 0:
+                    erros.append(f'O campo "{campo}" não pode ser negativo.')
+            except ValueError:
+                erros.append(f'O campo "{campo}" deve ser um número inteiro.')
+
+    return erros
 
 EXTENSOES_PERMITIDAS = {'png', 'jpg', 'jpeg', 'webp'}
 
@@ -184,6 +220,13 @@ def detalhe_imovel(id):
 @public_bp.route('/imovel/<int:id>/favoritar', methods=['POST'])
 @login_required
 def favoritar(id):
+    imovel = Imovel.query.get(id)
+    if imovel is None:
+        # Sem essa verificação, um id inexistente criaria um Favorito órfão
+        # (SQLite não força a FK em tempo de execução por padrão).
+        flash('Imóvel não encontrado.')
+        return redirect(url_for('public.menu_dos_menus'))
+
     ja_favoritado = Favorito.query.filter_by(
         usuario_id=current_user.id, imovel_id=id
     ).first()
@@ -200,9 +243,35 @@ def favoritar(id):
 @public_bp.route('/conta/editar', methods=['POST'])
 @login_required
 def editar_conta():
-    current_user.nome = request.form.get('nome')
-    current_user.email = request.form.get('email')
-    db.session.commit()
+    nome = (request.form.get('nome') or '').strip()
+    email = (request.form.get('email') or '').strip()
+
+    if len(nome) < 2:
+        flash('O nome deve ter pelo menos 2 caracteres.')
+        return redirect(url_for('public.menu_dos_menus'))
+    if email.count('@') != 1 or email.startswith('@') or email.endswith('@'):
+        flash('E-mail inválido.')
+        return redirect(url_for('public.menu_dos_menus'))
+
+    # E-mail pertence a outra conta? (unique no banco estouraria IntegrityError)
+    ja_existe = Usuario.query.filter(
+        Usuario.email == email,
+        Usuario.id != current_user.id
+    ).first()
+    if ja_existe:
+        flash('Esse e-mail já está em uso por outra conta.')
+        return redirect(url_for('public.menu_dos_menus'))
+
+    current_user.nome = nome
+    current_user.email = email
+    try:
+        db.session.commit()
+    except IntegrityError:
+        # Corrida: outro cadastro pegou esse e-mail entre a checagem e o commit.
+        db.session.rollback()
+        flash('Esse e-mail já está em uso por outra conta.')
+        return redirect(url_for('public.menu_dos_menus'))
+
     flash('Dados atualizados.')
     return redirect(url_for('public.menu_dos_menus'))
 
@@ -244,6 +313,12 @@ def deletar_conta():
 @admin_required
 def novo_imovel():
     if request.method == 'POST':
+        erros = validar_dados_imovel(request.form)
+        if erros:
+            for e in erros:
+                flash(e)
+            return render_template('novo_imovel.html')
+
         imovel = Imovel(
             nome=request.form.get('nome'),
             descricao=request.form.get('descricao'),
@@ -279,6 +354,12 @@ def editar_imovel(id):
     imovel = Imovel.query.get_or_404(id)
 
     if request.method == 'POST':
+        erros = validar_dados_imovel(request.form)
+        if erros:
+            for e in erros:
+                flash(e)
+            return render_template('editar_imovel.html', imovel=imovel)
+
         imovel.nome = request.form.get('nome')
         imovel.descricao = request.form.get('descricao')
         imovel.preco = request.form.get('preco')

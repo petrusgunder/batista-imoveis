@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block titulo %}Página não encontrada — JB Imóveis{% endblock %}
+
+{% block conteudo %}
+<section class="config">
+    <div class="config-conteudo config-secao" style="margin: 0 auto; max-width: 480px;">
+        <h1>404</h1>
+        <p class="config-sub">A página que você procura não existe ou foi removida.</p>
+        <p class="config-sub">Confira o endereço ou volte para a busca de imóveis.</p>
+        <a class="config-btn" href="{{ url_for('public.home') }}" style="display: inline-block; text-decoration: none;">Voltar ao início</a>
+    </div>
+</section>
+{% endblock %}

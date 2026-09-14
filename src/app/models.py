@@ -7,21 +7,34 @@ db = SQLAlchemy()
 
 class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuarios'
+    __table_args__ = (
+        # google_id é único SÓ onde não é NULL. Indice único parcial, e não
+        # unique=True na coluna: o SQLite 3.45 rejeita ALTER ADD COLUMN ...
+        # UNIQUE, então a migração em banco existente precisa desse formato.
+        db.Index('uq_usuarios_google_id', 'google_id',
+                 unique=True, sqlite_where=db.text('google_id IS NOT NULL')),
+    )
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     senha = db.Column(db.String(200), nullable=False)  # 200, não 100 — hash é mais longo que 100 caracteres
+    # Contas do Google (ou híbridas) preenchem estes dois campos; as tradicionais ficam NULL.
+    google_id = db.Column(db.String(200), nullable=True)
+    picture = db.Column(db.String(500), nullable=True)  # avatar do Google
 
     def set_senha(self, senha_pura):
         self.senha = generate_password_hash(senha_pura)
 
     def check_senha(self, senha_pura):
+        # Contas só-Google têm um hash sentinela irreversível na senha. Sem o
+        # guard, check_password_hash(None, ...) subiria AttributeError em vez
+        # de retornar False (senha sempre "errada" para elas).
+        if not self.senha:
+            return False
         return check_password_hash(self.senha, senha_pura)
 
     def get_id(self):
         return f"usuario-{self.id}"
-
-    
 
     favoritos = db.relationship('Favorito', backref='usuario', cascade='all, delete-orphan')
     historico = db.relationship('Historico', backref='usuario', cascade='all, delete-orphan')

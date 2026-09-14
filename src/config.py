@@ -29,3 +29,16 @@ class Config:
     MAX_TAMANHO_ARQUIVO = 5 * 1024 * 1024  # 5 MB por foto
     # Número máximo de fotos por imóvel (evita encher o servidor de arquivos).
     MAX_FOTOS_POR_IMOVEL = 10
+
+    # --- Login com Google (Firebase Authentication) -------------------------
+    # Config PÚBLICA do SDK web (vai pro navegador; não é segredo).
+    # Todas opcionais: sem elas o app sobe normalmente e o botão Google some.
+    FIREBASE_API_KEY = os.environ.get('FIREBASE_API_KEY')
+    FIREBASE_AUTH_DOMAIN = os.environ.get('FIREBASE_AUTH_DOMAIN')
+    FIREBASE_PROJECT_ID = os.environ.get('FIREBASE_PROJECT_ID')
+    FIREBASE_APP_ID = os.environ.get('FIREBASE_APP_ID')
+    FIREBASE_STORAGE_BUCKET = os.environ.get('FIREBASE_STORAGE_BUCKET')
+    FIREBASE_MESSAGING_SENDER_ID = os.environ.get('FIREBASE_MESSAGING_SENDER_ID')
+    # SEGREDO: caminho local pro JSON da service account (gerado no Console).
+    # Nunca versionar o arquivo — ver .gitignore.
+    FIREBASE_SERVICE_ACCOUNT_JSON = os.environ.get('FIREBASE_SERVICE_ACCOUNT_JSON')
