@@ -616,6 +616,38 @@ nav.pesquisa a:hover svg {
     box-shadow: none;
 }
 
+/* topo da área administrativa: título + botão de novo cadastro */
+.admin-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+/* botão primário da área admin — Cadastrar novo imóvel */
+.btn-novo-imovel {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    background: var(--terracotta);
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-novo-imovel:hover {
+    background: var(--terracotta-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -12px rgba(184, 72, 31, 0.7);
+}
+
 /* WhatsApp — verde característico, mas dentro da paleta */
 .contatos button:first-child {
     background: #4a7c59;
