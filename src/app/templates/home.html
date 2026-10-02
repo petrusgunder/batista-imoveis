@@ -1,65 +1,26 @@
 {% extends "base.html" %}
 
-{% block conteudo %}
-
-    {% if mais_visitados %}
-        <section class="carrossel-destaque">
-            <h2>Mais visitados</h2>
-            <div class="carrossel-wrapper">
-                <button type="button" class="carrossel-seta carrossel-seta-esquerda" id="seta-esquerda" aria-label="Anterior">‹</button>
-
-                <div class="carrossel-track" id="carrossel-track">
-                    {% for imovel, visitas in mais_visitados %}
-                        <a href="{{ url_for('public.detalhe_imovel', id=imovel.id) }}" class="carrossel-card">
-                            {% if imovel.fotos %}
-                                <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
-                            {% else %}
-                                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
-                            {% endif %}
-                            <div class="carrossel-card-info">
-                                <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
-                                <p class="localizacao">{{ imovel.localizacao }}</p>
-                            </div>
-                        </a>
-                    {% endfor %}
-                    {# Segundo conjunto, IDÊNTICO ao de cima — é o que permite o loop parecer infinito #}
-                    {% for imovel, visitas in mais_visitados %}
-                        <a href="{{ url_for('public.detalhe_imovel', id=imovel.id) }}" class="carrossel-card">
-                            {% if imovel.fotos %}
-                                <img src="{{ url_for('static', filename='uploads/' + imovel.fotos[0].url) }}" alt="{{ imovel.nome }}">
-                            {% else %}
-                                <img src="https://st3.depositphotos.com/1021974/16608/i/450/depositphotos_166083136-stock-photo-illustration-of-generic-house.jpg" alt="{{ imovel.nome }}">
-                            {% endif %}
-                            <div class="carrossel-card-info">
-                                <p class="preco">R$ {{ "{:,.2f}".format(imovel.preco) }}</p>
-                                <p class="localizacao">{{ imovel.localizacao }}</p>
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-
-                <button type="button" class="carrossel-seta carrossel-seta-direita" id="seta-direita" aria-label="Próximo">›</button>
-            </div>
-        </section>
-    {% endif %}
-
-    <section class="hero">
-        <h1>Encontre o imóvel certo, no seu bairro.</h1>
-        <p class="hero-sub">Casas, apartamentos e kitnets em venda ou aluguel na sua região.</p>
-
-        <form class="filtro" action="{{ url_for('public.home') }}" method="GET">
+{% block icone_lupa %}
+<div class="dropdown-filtro">
+    <button class="btn-lupa" id="btn-lupa" aria-label="Buscar imóveis" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+    </button>
+    <div class="dropdown-conteudo" id="dropdown-filtro">
+        <form class="filtro-dropdown" action="{{ url_for('public.home') }}" method="GET">
             <div class="campo">
                 <label for="busca">O que você procura</label>
                 <input type="text" id="busca" name="busca" placeholder="Bairro, rua ou cidade">
-        </div>
+            </div>
 
             <div class="campo campo-curto">
                 <label for="negociacao">Negócio</label>
-                    <select id="negociacao" name="negociacao">
-                        <option value="">Qualquer</option>
-                        <option value="venda">Comprar</option>
-                        <option value="aluguel">Alugar</option>
-                    </select>
+                <select id="negociacao" name="negociacao">
+                    <option value="">Qualquer</option>
+                    <option value="venda">Comprar</option>
+                    <option value="aluguel">Alugar</option>
+                </select>
             </div>
 
             <div class="campo campo-curto">
@@ -84,6 +45,16 @@
 
             <button type="submit">Buscar imóveis</button>
         </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block conteudo %}
+
+
+    <section class="hero">
+        <h1>Encontre o imóvel certo, no seu bairro.</h1>
+        <p class="hero-sub">Casas, apartamentos e kitnets em venda ou aluguel na sua região.</p>
     </section>
 
     <section class="imoveis-em-destaque">
@@ -117,56 +88,25 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const track = document.getElementById('carrossel-track');
-    const setaEsquerda = document.getElementById('seta-esquerda');
-    const setaDireita = document.getElementById('seta-direita');
-    if (!track) return;
+    // Controle do dropdown de filtro (lupa)
+    const btnLupa = document.getElementById('btn-lupa');
+    const dropdownFiltro = document.getElementById('dropdown-filtro');
 
-    const cards = Array.from(track.querySelectorAll('.carrossel-card'));
-    const metade = cards.length / 2;
-    const larguraConjunto = cards[0].offsetWidth * metade + 16 * metade;
-
-    function destacarCardCentral() {
-        const centroTrack = track.scrollLeft + track.clientWidth / 2;
-        let maisProximo = null;
-        let menorDistancia = Infinity;
-
-        cards.forEach(card => {
-            const centroCard = card.offsetLeft + card.offsetWidth / 2;
-            const distancia = Math.abs(centroCard - centroTrack);
-            if (distancia < menorDistancia) {
-                menorDistancia = distancia;
-                maisProximo = card;
-            }
-            card.classList.remove('ativo');
+    if (btnLupa && dropdownFiltro) {
+        btnLupa.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const aberto = dropdownFiltro.classList.toggle('aberto');
+            btnLupa.setAttribute('aria-expanded', String(aberto));
         });
 
-        if (maisProximo) maisProximo.classList.add('ativo');
+        // Fecha o dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!dropdownFiltro.contains(e.target) && !btnLupa.contains(e.target)) {
+                dropdownFiltro.classList.remove('aberto');
+                btnLupa.setAttribute('aria-expanded', 'false');
+            }
+        });
     }
-
-    function normalizarLoop() {
-        if (track.scrollLeft >= larguraConjunto) {
-            track.scrollLeft -= larguraConjunto;
-        } else if (track.scrollLeft < 0) {
-            track.scrollLeft += larguraConjunto;
-        }
-    }
-
-    function avancar() {
-        track.scrollBy({ left: 240, behavior: 'smooth' });
-        setTimeout(() => { normalizarLoop(); destacarCardCentral(); }, 350);
-    }
-
-    function voltar() {
-        track.scrollBy({ left: -240, behavior: 'smooth' });
-        setTimeout(() => { normalizarLoop(); destacarCardCentral(); }, 350);
-    }
-
-    if (setaDireita) setaDireita.addEventListener('click', avancar);
-    if (setaEsquerda) setaEsquerda.addEventListener('click', voltar);
-
-    destacarCardCentral();
-    setInterval(avancar, 3000);
 });
 </script>
 

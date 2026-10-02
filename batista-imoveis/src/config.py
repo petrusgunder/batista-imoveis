@@ -9,7 +9,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     # Sem fallback hardcoded: se a SECRET_KEY não existir no ambiente,
     # o app falha ao iniciar em vez de rodar com uma chave fraca/commitada.
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key_apenas_para_testes_locais')
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DATABASE_URL',
         'sqlite:///' + os.path.join(basedir, 'banco.db')

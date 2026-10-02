@@ -1,134 +1,259 @@
-# 🏠 JB Imóveis — Site de Imóveis
+# 🏠 Batista Imóveis - Guia de Uso
 
-> Site de divulgação de imóveis para venda e aluguel, com área administrativa para cadastro, edição e exclusão de imóveis, galeria de fotos, favoritos e histórico de visitas.
+Este guia mostrará como iniciar o site sem precisar de assistência técnica.
 
-![status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
-![python](https://img.shields.io/badge/python-3.x-blue)
-![flask](https://img.shields.io/badge/flask-3.x-black)
+## 📋 Requisitos
 
-## 📋 Sobre o projeto
+Antes de começar, certifique-se de ter instalado:
+- Python 3.8 ou superior
+- pip (gerenciador de pacotes do Python)
 
-O **JB Imóveis** é uma aplicação web (Flask) que permite a visitantes **buscar e ver imóveis disponíveis** (venda ou aluguel) com filtros de busca, negociação, tipo e preço. Cada anúncio tem uma **página de detalhe com galeria de fotos** (foto principal em destaque + miniaturas).
+Para verificar se você tem o Python instalado, abra o terminal e digite:
+```bash
+python3 --version
+```
 
-Visitantes podem **criar conta**, salvar **imóveis favoritos** e consultar o **histórico** dos imóveis que visualizaram. A área administrativa (login protegido) permite gerenciar o catálogo: **cadastrar, editar e excluir imóveis**, além de **adicionar e remover fotos** individualmente.
+## 🚀 Como Iniciar o Site
 
-## ✨ Funcionalidades
+### Método 1: Script Automático (Recomendado)
 
-- [x] Listagem de imóveis com filtros (busca por local, negociação venda/aluguel, tipo e faixa de preço)
-- [x] Carrossel de "Mais visitados" na página inicial
-- [x] Página de detalhe com galeria de fotos (foto principal + miniaturas clicáveis)
-- [x] Cadastro e login de usuários (Flask-Login)
-- [x] Favoritos e histórico de visitas
-- [x] Área administrativa (login próprio) para cadastro, edição e exclusão de imóveis
-- [x] Upload múltiplo de fotos (com pré-visualização e botão para adicionar uma a uma)
-- [x] Remoção individual de fotos na edição
-- [x] Página de configurações de conta (editar dados, trocar senha, excluir conta)
-- [x] Layout responsivo
+1. **Abra o terminal** na pasta do projeto `batista-imoveis`
 
-## 🛠️ Tecnologias
+2. **Execute o script de inicialização:**
+   ```bash
+   ./iniciar-site.sh
+   ```
 
-| Camada | Tecnologia | Por quê |
-|---|---|---|
-| Backend | Flask 3.x | Leve e direto, ideal para o porte do projeto |
-| Banco de dados | SQLite | Sem servidor separado; suficiente para o volume esperado |
-| Frontend | HTML5 + CSS3 + JS vanilla | Controle total do layout, sem frameworks pesados |
-| Autenticação | Flask-Login | Sessões e proteção de rotas (usuário e admin) |
-| Proteção CSRF | itsdangerous (nativa do Flask) | Token assinado por sessão em todos os formulários POST |
+3. **Pronto!** O site estará disponível em:
+   - http://127.0.0.1:5000
+   - http://localhost:5000
 
-## 🗂️ Estrutura do projeto
+4. **Para parar o servidor**, pressione `CTRL+C` no terminal
+
+### Método 2: Manual
+
+Se preferir fazer manualmente, siga estes passos:
+
+1. **Navegue até a pasta src:**
+   ```bash
+   cd src
+   ```
+
+2. **Ative o ambiente virtual:**
+   ```bash
+   source venv/bin/activate
+   ```
+
+3. **Instale as dependências (primeira vez):**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Inicie o servidor:**
+   ```bash
+   python run.py
+   ```
+
+5. **Para parar o servidor**, pressione `CTRL+C`
+
+## 📂 Estrutura do Projeto
 
 ```
 batista-imoveis/
-├── README.md
-├── documentação/
-│   ├── BD.pdf                 # Diagrama do banco de dados
-│   └── modelo logico.txt      # Modelo lógico das tabelas
-└── src/
-    ├── run.py                 # Inicialização (cria tabelas e sobe o servidor)
-    ├── requirements.txt       # Dependências
-    ├── config.py              # Configuração + limites de segurança de upload
-    ├── banco.db               # Banco SQLite (gerado automaticamente)
-    ├── .env                   # Variáveis sensíveis (SECRET_KEY) — não versionar
-    ├── app/
-    │   ├── __init__.py        # create_app + proteção CSRF global
-    │   ├── models.py          # Modelos: Usuario, ADM, Imovel, Foto, Favorito, Historico
-    │   ├── routes/
-    │   │   ├── auth.py        # Cadastro, login (usuário e admin), logout
-    │   │   └── public.py      # Home, detalhe, favoritos, histórico, admin de imóveis
-    │   ├── templates/         # Páginas HTML (Jinja2)
-    │   └── static/
-    │       ├── css/style.css  # Estilos (paleta terracota/madeira/papel)
-    │       ├── js/upload.js   # Adicionar múltiplas fotos com pré-visualização
-    │       └── uploads/       # Fotos dos imóveis
+├── iniciar-site.sh          # Script de inicialização automática
+├── src/
+│   ├── .env                 # Configurações (SECRET_KEY, Firebase, etc)
+│   ├── run.py              # Arquivo principal para iniciar o servidor
+│   ├── config.py           # Configurações do Flask
+│   ├── requirements.txt    # Dependências do projeto
+│   ├── venv/               # Ambiente virtual Python
+│   └── app/
+│       ├── __init__.py     # Inicialização do Flask
+│       ├── models.py       # Modelos do banco de dados
+│       ├── routes/         # Rotas da aplicação
+│       ├── templates/      # Templates HTML
+│       └── static/         # Arquivos CSS, JS, imagens
 ```
 
-## 🗃️ Modelo de dados (resumo)
+## ⚙️ Configurações
 
-**Usuario** — id, nome, email, senha (hash)
+### Arquivo .env
 
-**ADM** — id, nome, email, senha (hash) — administrador do site
+O arquivo `src/.env` contém todas as configurações do site:
 
-**Imovel** — id, nome, descricao, preco, localizacao, tipo, finalidade (`venda`/`aluguel`), quartos, banheiros, area, status (`disponivel`/`vendido`/`alugado`)
+```env
+# Chave secreta (já configurada automaticamente)
+SECRET_KEY=sua-chave-secreta-aqui
 
-**Foto** — id, imovel_id (FK), url (um imóvel pode ter várias fotos, limitadas a 10)
+# Modo debug (1 = ativo, 0 = desativo)
+FLASK_DEBUG=1
 
-**Favorito** — id, usuario_id (FK), imovel_id (FK), com unicidade por par usuário/imóvel
+# Segurança de cookies
+SESSION_COOKIE_SECURE=0
 
-**Historico** — id, usuario_id (FK), imovel_id (FK), data_acesso
+# Firebase (opcional - apenas se usar login com Google)
+FIREBASE_API_KEY=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_PROJECT_ID=
+FIREBASE_APP_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_SERVICE_ACCOUNT_JSON=
+```
 
-O modelo lógico completo está em `documentação/modelo logico.txt` e o diagrama em `documentação/BD.pdf`.
+### Configurar Login com Google (Opcional)
 
-## 🚀 Como rodar localmente
+Se quiser ativar o login com Google:
 
+1. Acesse o [Firebase Console](https://console.firebase.google.com/)
+2. Crie um novo projeto ou use um existente
+3. Ative o Authentication → Google
+4. Copie as credenciais e cole no arquivo `.env`
+
+## 🔧 Solução de Problemas
+
+### Problema: "Permission denied" ao executar o script
+
+**Solução:**
+```bash
+chmod +x iniciar-site.sh
+```
+
+### Problema: "python3: command not found"
+
+**Solução:** Instale o Python 3:
+- Ubuntu/Debian: `sudo apt install python3 python3-pip`
+- Fedora: `sudo dnf install python3 python3-pip`
+- Arch: `sudo pacman -S python python-pip`
+
+### Problema: "Module not found"
+
+**Solução:** Reinstale as dependências:
 ```bash
 cd src
-
-# Opção A — usar o Python do sistema (é o que tem Flask instalado)
-python3 run.py
-
-# Opção B — com ambiente virtual
-python3 -m venv venv
-venv/bin/pip install -r requirements.txt
-venv/bin/python run.py
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-> Acesse `http://localhost:5000`. As tabelas são criadas automaticamente na primeira execução (`db.create_all()`).
+### Problema: Porta 5000 já em uso
 
-> **Login de administrador**: o acesso admin é feito pela rota `/admin/login`. O primeiro administrador precisa ser criado direto na tabela `adm` do banco (o cadastro público cria apenas usuários comuns). Exemplo:
-> ```bash
-> python3 -c "
-> from app import create_app
-> from app.models import db, ADM
-> app = create_app()
-> with app.app_context():
->     adm = ADM(nome='Admin', email='admin@email.com')
->     adm.set_senha('sua-senha')
->     db.session.add(adm); db.session.commit()
-> "
-> ```
+**Solução:** Pare outros processos na porta 5000:
+```bash
+# Descubra o processo
+lsof -i :5000
 
-## 🔒 Segurança implementada
+# Mate o processo (substitua PID pelo número mostrado)
+kill -9 PID
+```
 
-- **Senhas com hash** — `werkzeug.security` (nenhuma senha em texto puro no banco)
-- **Proteção CSRF** — token assinado por sessão (itsdangerous) validado em **todo** formulário POST no `before_request`; requisições sem token válido recebem HTTP 400
-- **Validação de upload** — extensão permitida + verificação de **conteúdo real** (magic bytes de JPEG/PNG/WEBP), impedindo arquivos renomeados
-- **Limites de upload** — no máximo **10 fotos por imóvel**, **5 MB por foto** e **16 MB por requisição** (`config.py` → `MAX_CONTENT_LENGTH`)
-- **Nome de arquivos saneado** — `secure_filename` + prefixo do id do imóvel (evita colisão e path traversal)
-- **Variáveis sensíveis fora do código** — `SECRET_KEY` no `.env`
-- **Queries parametrizadas / uso de ORM** — SQLAlchemy, sem concatenação de SQL
+Ou edite `src/run.py` e mude a porta:
+```python
+app.run(debug=os.environ.get('FLASK_DEBUG', '0') == '1', port=8000)
+```
 
-## 📌 Decisões técnicas
+### Problema: Erro "SECRET_KEY not found"
 
-- **SQLite em vez de Postgres**: sem infraestrutura extra, suficiente para o volume do projeto; fácil de trocar depois via `DATABASE_URL`.
-- **Múltiplas fotos por imóvel**: tabela `Foto` separada com FK para `Imovel`, permitindo galeria de N fotos com limite para proteger o servidor.
-- **CSRF sem Flask-WTF**: token assinado com `itsdangerous` (já é dependência do Flask), evitando adicionar uma biblioteca e um ciclo de formulários externos.
-- **Thumbnails na galeria**: foto principal + miniaturas trocáveis via JavaScript puro, sem biblioteca de carrossel.
+**Solução:** Execute o script automático que criará o `.env` automaticamente, ou crie manualmente:
+```bash
+cd src
+python3 -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" > .env
+echo "FLASK_DEBUG=1" >> .env
+echo "SESSION_COOKIE_SECURE=0" >> .env
+```
 
-## 📷 Screenshots
+## 📝 Banco de Dados
 
-*(adicione prints do site quando estiver pronto — página inicial, detalhe do imóvel e área admin)*
+O site usa SQLite, que cria automaticamente um arquivo `src/banco.db` na primeira execução.
 
-## 👤 Autor
+**Backup do banco:**
+```bash
+cp src/banco.db src/banco_backup_$(date +%Y%m%d).db
+```
 
-Projeto de portfólio desenvolvido após a conclusão do curso técnico.
-[LinkedIn] | [GitHub] | [Portfólio]
+**Resetar banco (CUIDADO: apaga todos os dados):**
+```bash
+rm src/banco.db
+# O banco será recriado na próxima inicialização
+```
+
+## 🔒 Segurança
+
+### Para Desenvolvimento (ambiente local):
+- `FLASK_DEBUG=1` - Modo debug ativo
+- `SESSION_COOKIE_SECURE=0` - Cookies funcionam sem HTTPS
+
+### Para Produção (servidor real):
+1. Mude no arquivo `.env`:
+   ```env
+   FLASK_DEBUG=0
+   SESSION_COOKIE_SECURE=1
+   ```
+
+2. Use um servidor WSGI como Gunicorn:
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 run:app
+   ```
+
+## 📞 Comandos Úteis
+
+```bash
+# Ver logs do servidor em tempo real
+tail -f src/app.log
+
+# Listar processos Python rodando
+ps aux | grep python
+
+# Parar todos os servidores Flask
+pkill -f "python run.py"
+
+# Atualizar dependências
+cd src && source venv/bin/activate && pip install --upgrade -r requirements.txt
+
+# Criar novo usuário administrador (via Python)
+cd src && source venv/bin/activate && python
+>>> from app import create_app, db
+>>> from app.models import ADM
+>>> app = create_app()
+>>> with app.app_context():
+...     admin = ADM(username='admin', email='admin@exemplo.com', senha='senha123')
+...     db.session.add(admin)
+...     db.session.commit()
+```
+
+## 📖 Páginas Disponíveis
+
+- `/` - Página inicial
+- `/login` - Login de usuários
+- `/cadastro` - Cadastro de novos usuários
+- `/loguinadm` - Login de administradores
+- `/gerenciar_imoveis` - Gerenciar imóveis (apenas admin)
+- `/novo_imovel` - Adicionar novo imóvel (apenas admin)
+- `/favoritos` - Imóveis favoritos do usuário
+- `/contato` - Página de contato
+
+## 💡 Dicas
+
+1. **Primeira execução**: O script automático configura tudo para você
+2. **Atualizações**: Sempre use `git pull` antes de iniciar para ter a versão mais recente
+3. **Backup**: Faça backup regular do arquivo `src/banco.db`
+4. **Logs**: Se algo der errado, verifique as mensagens no terminal
+
+## 🎯 Início Rápido (TL;DR)
+
+```bash
+# Clone ou baixe o projeto
+cd batista-imoveis
+
+# Execute o script
+./iniciar-site.sh
+
+# Acesse no navegador
+# http://localhost:5000
+```
+
+---
+
+**Desenvolvido com Flask** 🐍
+
+*Última atualização: Outubro 2026*
